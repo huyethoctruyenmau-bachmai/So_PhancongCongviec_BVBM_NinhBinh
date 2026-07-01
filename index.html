@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN</title>
-  <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=1.0">
-  <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=1.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=1.0">
-  <link rel="manifest" href="./manifest.json?v=1.0">
-  <meta name="msapplication-TileImage" content="./APP_ICON_LICH_PHAN_CONG_192.png?v=1.0">
+  <title>Lịch phân công công việc PXN - Version 2.1</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=2.1">
+  <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=2.1">
+  <link rel="manifest" href="./manifest.json?v=2.1">
+  <meta name="msapplication-TileImage" content="./APP_ICON_LICH_PHAN_CONG_192.png?v=2.1">
   <meta name="theme-color" content="#580824">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -46,6 +46,7 @@
     .brand-sub{font-size:12.5px;opacity:.9;line-height:1.3}
     .top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
     .user-chip{font-size:13px;color:#fff;opacity:.92;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .version-chip{font-size:12px;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 8px;white-space:nowrap;font-weight:700}
     .main{padding:12px 14px 24px;min-width:0}
     .toolbar{
       display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
@@ -238,6 +239,7 @@
       background:rgba(255,255,255,.98);border-top:1px solid var(--line);
       box-shadow:0 -4px 18px rgba(74,7,31,.10);
       padding:4px 6px var(--safe-bottom) 6px;
+      visibility:visible!important;opacity:1!important;
       overflow:hidden;overscroll-behavior:none;
     }
     .tabbar.has-admin{grid-template-columns:repeat(3,minmax(0,1fr));}
@@ -246,7 +248,7 @@
       display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
       font-size:12px;font-weight:700;line-height:1.15;padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
-    .tab-btn .ico{font-size:20px;line-height:1}.tab-btn.active{background:#fff0f5;color:var(--wine);font-weight:800}.tab-btn.hidden{display:none!important}
+    .tab-btn .ico{font-size:20px;line-height:1}.tab-btn.active{background:#fff0f5;color:var(--wine);font-weight:800;border:1px solid #e2b5c7}.tab-btn.hidden{display:none!important}
     .main{
       position:fixed!important;
       left:0!important;right:0!important;
@@ -298,9 +300,10 @@
   <header class="topbar">
     <div class="brand">
       <div class="brand-title">Lịch phân công công việc PXN</div>
-      <div class="brand-sub">Xem lịch tuần không cần đăng nhập · Đăng nhập khi đổi lịch/quản lý lịch</div>
+      <div class="brand-sub">Tab 1: Lịch công việc · Tab 2: Đổi lịch · Quản lý đăng nhập để hiện Tab 3: Tạo lịch</div>
     </div>
     <div class="top-actions">
+      <span id="versionChip" class="version-chip">Version 2.1</span>
       <span id="userChip" class="user-chip hidden"></span>
       <button id="btnLogin" class="btn primary" type="button">Đăng nhập</button>
       <button id="btnLogout" class="btn secondary hidden" type="button">Đăng xuất</button>
@@ -422,6 +425,9 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
+const INDEX_VERSION = 2;
+const CODE_VERSION = 1;
+const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
 const POSITIONS = [
   { key:'Bệnh phẩm', label:'Bệnh phẩm', required:1, lunch:false, cls:'col-bp' },
@@ -456,6 +462,7 @@ document.addEventListener('DOMContentLoaded', init);
 
 function init(){
   bindEvents();
+  if($('versionChip')) $('versionChip').textContent = 'Version ' + APP_VERSION;
   $('weekStartInput').value = state.weekStart;
   restoreSession();
   loadPublicWeek();
