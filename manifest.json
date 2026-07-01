@@ -1,0 +1,37 @@
+{
+  "name": "Lịch phân công công việc PXN",
+  "short_name": "Lịch PXN",
+  "description": "Ứng dụng xem và đổi lịch phân công công việc phòng xét nghiệm",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f8f1f4",
+  "theme_color": "#580824",
+  "icons": [
+    {
+      "src": "./APP_ICON_LICH_PHAN_CONG_64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./APP_ICON_LICH_PHAN_CONG_180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./APP_ICON_LICH_PHAN_CONG_192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./APP_ICON_LICH_PHAN_CONG_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
