@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 7.1</title>
-  <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=7.1">
-  <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=7.1">
-  <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=7.1">
-  <link rel="manifest" href="./manifest.json?v=7.1">
-  <meta name="msapplication-TileImage" content="./APP_ICON_LICH_PHAN_CONG_192.png?v=7.1">
+  <title>Lịch phân công công việc PXN - Version 9.1</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=9.1">
+  <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=9.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=9.1">
+  <link rel="manifest" href="./manifest.json?v=9.1">
+  <meta name="msapplication-TileImage" content="./APP_ICON_LICH_PHAN_CONG_192.png?v=9.1">
   <meta name="theme-color" content="#580824">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -64,6 +64,16 @@
     .btn.ok{background:var(--ok);color:#fff}
     .btn.warn{background:#f9ab00;color:#202124}
     .btn:disabled{opacity:.55;cursor:not-allowed}
+    button{position:relative}
+    button.is-loading{opacity:.58!important;pointer-events:none!important;color:transparent!important}
+    button.is-loading > *{opacity:0!important}
+    button.is-loading::after{
+      content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;
+      border:2px solid rgba(26,115,232,.25);border-top-color:var(--blue);border-radius:50%;
+      animation:btnspin .75s linear infinite;z-index:2;
+    }
+    button.is-loading.btn.primary::after,button.is-loading.btn.ok::after,button.is-loading.btn.danger::after,button.is-loading.logout-icon-btn::after{border-color:rgba(255,255,255,.45);border-top-color:#fff}
+    @keyframes btnspin{to{transform:rotate(360deg)}}
     input,select,textarea{
       min-height:36px;border:1px solid var(--line);border-radius:8px;padding:6px 9px;background:#fff;color:var(--text);outline:none
     }
@@ -386,6 +396,191 @@
       .swap-panel .request-item{padding:7px!important;font-size:11.5px!important}.swap-panel .small{font-size:10.8px!important}.swap-panel .pill{font-size:10px!important;padding:3px 6px!important}
     }
 
+
+    /* ===== PATCH V9.1: GOOGLE MATERIAL STYLE - BUTTONS, CARDS, FONTS, TABLE SPACING ===== */
+    :root{
+      --g-blue:#1a73e8!important;
+      --g-blue-hover:#1765cc!important;
+      --g-blue-soft:#e8f0fe!important;
+      --g-text:#202124!important;
+      --g-muted:#5f6368!important;
+      --g-line:#dadce0!important;
+      --g-bg:#f8fafd!important;
+      --g-field-bg:#ffffff!important;
+      --g-danger:#d93025!important;
+      --g-ok:#188038!important;
+      --g-warn:#f9ab00!important;
+      --text:#202124!important;
+      --muted:#5f6368!important;
+      --line:#dadce0!important;
+      --bg:#f8fafd!important;
+      --radius:8px!important;
+      --shadow:0 1px 2px rgba(60,64,67,.30),0 1px 3px 1px rgba(60,64,67,.15)!important;
+    }
+    html,body,button,input,select,textarea{
+      font-family:Roboto,"Google Sans","Segoe UI",Arial,"Noto Sans",Tahoma,sans-serif!important;
+      color:var(--g-text)!important;
+      letter-spacing:.1px!important;
+    }
+    body{font-size:14px!important;line-height:1.5!important;background:var(--g-bg)!important}
+    .app{background:var(--g-bg)!important}
+    .main{background:var(--g-bg)!important;line-height:1.5!important}
+    .brand-title{font-weight:500!important;letter-spacing:.1px!important}
+    .brand-sub,.version-chip,.user-chip{font-weight:400!important;letter-spacing:.1px!important}
+
+    .btn,
+    .tab-day,
+    .close,
+    .swap-refresh-icon,
+    .logout-icon-btn{
+      font-family:Roboto,"Google Sans","Segoe UI",Arial,"Noto Sans",Tahoma,sans-serif!important;
+      min-height:36px!important;
+      height:36px!important;
+      border-radius:4px!important;
+      padding:0 16px!important;
+      font-size:14px!important;
+      font-weight:500!important;
+      line-height:20px!important;
+      letter-spacing:.15px!important;
+      display:inline-flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:8px!important;
+      box-shadow:none!important;
+      transition:background .12s ease,box-shadow .12s ease,border-color .12s ease,color .12s ease!important;
+    }
+    .btn{background:#fff!important;color:var(--g-blue)!important;border:1px solid var(--g-line)!important}
+    .btn:hover{background:#f8fbff!important;box-shadow:0 1px 2px rgba(60,64,67,.18)!important}
+    .btn.primary{background:var(--g-blue)!important;color:#fff!important;border-color:var(--g-blue)!important}
+    .btn.primary:hover{background:var(--g-blue-hover)!important;border-color:var(--g-blue-hover)!important;box-shadow:0 1px 2px rgba(60,64,67,.30),0 1px 3px 1px rgba(60,64,67,.15)!important}
+    .btn.secondary{background:#fff!important;color:var(--g-blue)!important;border-color:var(--g-line)!important}
+    .btn.ok{background:var(--g-ok)!important;color:#fff!important;border-color:var(--g-ok)!important}
+    .btn.danger{background:var(--g-danger)!important;color:#fff!important;border-color:var(--g-danger)!important}
+    .btn.warn{background:var(--g-warn)!important;color:#202124!important;border-color:var(--g-warn)!important}
+    .btn:disabled{opacity:.55!important;box-shadow:none!important;cursor:not-allowed!important}
+
+    input,select,textarea{
+      min-height:36px!important;
+      height:36px!important;
+      border:1px solid var(--g-line)!important;
+      border-radius:4px!important;
+      background:var(--g-field-bg)!important;
+      color:var(--g-text)!important;
+      font-size:14px!important;
+      font-weight:400!important;
+      line-height:20px!important;
+      padding:7px 10px!important;
+      box-shadow:none!important;
+      outline:none!important;
+    }
+    textarea{height:auto!important;min-height:72px!important;line-height:1.45!important}
+    input:hover,select:hover,textarea:hover{border-color:#bdc1c6!important}
+    input:focus,select:focus,textarea:focus{border-color:var(--g-blue)!important;box-shadow:0 0 0 1px var(--g-blue)!important}
+    label{font-size:13px!important;font-weight:500!important;color:var(--g-muted)!important;line-height:18px!important;margin-bottom:5px!important}
+
+    .toolbar,
+    .card,
+    .swap-col,
+    .request-item,
+    .modal-card,
+    .message,
+    .editor-wrap,
+    .paper{
+      border:1px solid var(--g-line)!important;
+      border-radius:8px!important;
+      background:#fff!important;
+      box-shadow:none!important;
+    }
+    .toolbar,.card,.swap-col,.modal-card{padding:14px!important}
+    .paper{box-shadow:0 1px 2px rgba(60,64,67,.20)!important}
+    .card-title,.swap-col-title{font-weight:500!important;color:var(--g-text)!important;line-height:1.35!important;letter-spacing:.1px!important}
+    .card-title{font-size:20px!important;margin-bottom:12px!important}
+    .swap-col-title{font-size:16px!important;margin-bottom:12px!important}
+    .small,.muted,.status-line,.week-label{color:var(--g-muted)!important;line-height:1.5!important;font-weight:400!important}
+    .week-label{font-size:14px!important;color:var(--g-text)!important;font-weight:500!important}
+
+    .tabbar{background:#fff!important;border-color:var(--g-line)!important;box-shadow:0 -1px 2px rgba(60,64,67,.10)!important}
+    .tab-btn{border-radius:8px!important;color:var(--g-muted)!important;font-weight:500!important;line-height:1.2!important;letter-spacing:.1px!important}
+    .tab-btn.active{background:var(--g-blue-soft)!important;color:var(--g-blue)!important;border:0!important;font-weight:500!important}
+    .tab-day{background:#fff!important;color:var(--g-blue)!important;border:1px solid var(--g-line)!important}
+    .tab-day.active{background:var(--g-blue-soft)!important;color:var(--g-blue)!important;border-color:transparent!important}
+
+    .paper-title{font-weight:500!important;color:var(--g-text)!important;line-height:1.35!important;letter-spacing:.1px!important}
+    .paper-sub,.paper-note{color:var(--g-muted)!important;line-height:1.55!important}
+    .day-title{color:var(--g-blue)!important;font-weight:500!important;line-height:1.45!important;letter-spacing:.1px!important}
+    table.schedule-table,table.edit-table{border-color:var(--g-line)!important;line-height:1.55!important;color:var(--g-text)!important}
+    .schedule-table th,.schedule-table td,
+    .edit-table th,.edit-table td{
+      border-color:var(--g-line)!important;
+      line-height:1.55!important;
+      vertical-align:middle!important;
+      padding:6px 5px!important;
+    }
+    .schedule-table th,.edit-table th{background:#f8fafd!important;color:var(--g-text)!important;font-weight:500!important}
+    .schedule-table td,.edit-table td{font-weight:400!important}
+    .lunch{color:#d93025!important;font-weight:500!important}
+    .search-hit{background:#fce8b2!important;border-radius:2px!important;padding:0 2px!important}
+
+    .paper-print-icon,
+    .swap-refresh-icon,
+    .logout-icon-btn{
+      background:transparent!important;
+      border:0!important;
+      box-shadow:none!important;
+      padding:0!important;
+      color:var(--g-blue)!important;
+      border-radius:50%!important;
+    }
+    .logout-icon-btn{color:#fff!important}
+    .paper-print-icon:hover,.swap-refresh-icon:hover{background:rgba(26,115,232,.08)!important;color:var(--g-blue-hover)!important}
+    .logout-icon-btn:hover{background:rgba(255,255,255,.14)!important}
+    .paper-print-icon .icon2d,.swap-refresh-icon .icon2d,.logout-icon-btn .icon2d{stroke-width:1.9!important}
+
+    .pill{border-radius:999px!important;font-weight:500!important;line-height:18px!important;padding:3px 8px!important}
+    .pill.wait{background:#fef7e0!important;color:#a26300!important}
+    .pill.done{background:#e6f4ea!important;color:#137333!important}
+    .pill.no{background:#fce8e6!important;color:#c5221f!important}
+    .message{font-size:14px!important;line-height:1.5!important;padding:10px 12px!important}
+    .message.ok{background:#e6f4ea!important;color:#137333!important;border-color:#ceead6!important}
+    .message.warn{background:#fef7e0!important;color:#a26300!important;border-color:#feefc3!important}
+    .message.err{background:#fce8e6!important;color:#c5221f!important;border-color:#fad2cf!important}
+
+    button.is-loading{opacity:.60!important;pointer-events:none!important;color:transparent!important}
+    button.is-loading::after{border-color:rgba(26,115,232,.25)!important;border-top-color:var(--g-blue)!important}
+    button.is-loading.btn.primary::after,
+    button.is-loading.btn.ok::after,
+    button.is-loading.btn.danger::after,
+    button.is-loading.logout-icon-btn::after{border-color:rgba(255,255,255,.45)!important;border-top-color:#fff!important}
+
+    @media (min-width:900px){
+      .main{padding:10px 12px 14px!important}
+      .toolbar{padding:10px 12px!important;margin-bottom:10px!important}
+      .paper{padding:20px 16px!important}
+      .schedule-table{font-size:13px!important;line-height:1.55!important}
+      .schedule-table th,.schedule-table td{height:34px!important;padding:6px 5px!important}
+      .edit-table{font-size:13px!important;line-height:1.45!important}
+      .edit-table input{font-size:13px!important;height:34px!important;min-height:34px!important}
+    }
+    @media (max-width:760px){
+      .toolbar{padding:10px!important;gap:8px!important}
+      .toolbar-main,.toolbar-nav{gap:8px!important;column-gap:10px!important;row-gap:8px!important}
+      .btn,input,select{height:36px!important;min-height:36px!important;font-size:13px!important}
+      .card,.swap-col,.modal-card{padding:10px!important;border-radius:8px!important}
+      .paper{padding:12px 5px!important}
+      .paper-title{font-size:15px!important;line-height:1.35!important}
+      .paper-sub{font-size:11px!important;line-height:1.45!important}
+      .paper-note{font-size:9.5px!important;line-height:1.45!important}
+      .day-title{font-size:10px!important;line-height:1.45!important;margin-bottom:3px!important}
+      .schedule-table{font-size:8px!important;line-height:1.35!important}
+      .schedule-table th,.schedule-table td{height:20px!important;line-height:1.35!important;padding:3px 1px!important}
+      .edit-table{font-size:8px!important;line-height:1.35!important}
+      .edit-table th,.edit-table td{line-height:1.35!important;padding:3px 1px!important}
+      .edit-table input{font-size:8px!important;height:24px!important;min-height:24px!important;padding:1px!important}
+      .swap-field input,.swap-field select{height:36px!important;min-height:36px!important;font-size:12.5px!important;line-height:18px!important}
+      .swap-send-row .btn{height:36px!important;min-height:36px!important;font-size:13px!important}
+      .swap-col-title{font-size:13px!important}
+    }
+
   </style>
 </head>
 <body>
@@ -396,7 +591,7 @@
       
     </div>
     <div class="top-actions">
-      <span id="versionChip" class="version-chip">Version 7.1</span>
+      <span id="versionChip" class="version-chip">Version 9.1</span>
       <span id="userChip" class="user-chip hidden"></span>
       <button id="btnLogin" class="btn primary" type="button">Đăng nhập</button>
       <button id="btnLogout" class="logout-icon-btn hidden" type="button" aria-label="Đăng xuất" title="Đăng xuất"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 19V5a2 2 0 0 0-2-2h-6"/></svg></button>
@@ -438,10 +633,6 @@
       <div id="swapMessage"></div>
       <div class="swap-layout">
         <div class="swap-col swap-col-left">
-          <div class="swap-col-title">Đề xuất người khác yêu cầu mình đổi</div>
-          <div id="requestList" class="request-list"></div>
-        </div>
-        <div class="swap-col swap-col-right">
           <div class="swap-col-title">Tạo đề xuất đổi lịch</div>
           <div class="swap-form-grid">
             <div class="swap-field">
@@ -471,6 +662,10 @@
           <div class="btn-row swap-send-row">
             <button id="btnCreateSwap" class="btn primary" type="button">Gửi đề xuất</button>
           </div>
+        </div>
+        <div class="swap-col swap-col-right">
+          <div class="swap-col-title">Đề xuất người khác yêu cầu mình đổi</div>
+          <div id="requestList" class="request-list"></div>
         </div>
       </div>
     </section>
@@ -530,7 +725,7 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 7;
+const INDEX_VERSION = 9;
 const CODE_VERSION = 1;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -575,33 +770,72 @@ function init(){
 }
 
 function bindEvents(){
-  $('btnPrevWeek').onclick = () => changeWeek(-7);
-  $('btnNextWeek').onclick = () => changeWeek(7);
-  $('btnThisWeek').onclick = () => { state.weekStart = mondayOf(new Date()); syncWeekInput(); loadCurrentTabWeek(); };
+  $('btnPrevWeek').onclick = withButtonLoading(() => changeWeek(-7));
+  $('btnNextWeek').onclick = withButtonLoading(() => changeWeek(7));
+  $('btnThisWeek').onclick = withButtonLoading(() => { state.weekStart = mondayOf(new Date()); syncWeekInput(); return loadCurrentTabWeek(); });
   $('weekStartInput').onchange = () => { setWeekFromInput(); };
-  $('btnReload').onclick = () => { setWeekFromInput(); loadCurrentTabWeek(); };
+  $('btnReload').onclick = withButtonLoading(() => { setWeekFromInput(); return loadCurrentTabWeek(); });
   $('searchName').oninput = renderPaper;
 
-  $('btnLogin').onclick = openLogin;
-  $('btnCloseLogin').onclick = closeLogin;
-  $('btnDoLogin').onclick = login;
+  $('btnLogin').onclick = withButtonLoading(openLogin);
+  $('btnCloseLogin').onclick = withButtonLoading(closeLogin);
+  $('btnDoLogin').onclick = withButtonLoading(login);
   $('loginPass').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
-  $('btnLogout').onclick = logout;
+  $('btnLogout').onclick = withButtonLoading(logout);
 
   document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
-    btn.addEventListener('click', () => showTab(btn.dataset.tab));
+    btn.addEventListener('click', withButtonLoading(() => showTab(btn.dataset.tab)));
   });
 
-  $('btnLoadAdminWeek').onclick = loadAdminWeek;
-  if($('btnCopyPrevWeek')) $('btnCopyPrevWeek').onclick = copyPrevWeek;
-  $('btnSaveDraft').onclick = saveDraft;
-  $('btnPublishWeek').onclick = publishWeek;
+  $('btnLoadAdminWeek').onclick = withButtonLoading(loadAdminWeek);
+  if($('btnCopyPrevWeek')) $('btnCopyPrevWeek').onclick = withButtonLoading(copyPrevWeek);
+  $('btnSaveDraft').onclick = withButtonLoading(saveDraft);
+  $('btnPublishWeek').onclick = withButtonLoading(publishWeek);
 
   $('swapType').onchange = refreshSwapTargetVisibility;
   $('receiverInput').oninput = populateTargetAssignments;
-  $('btnCreateSwap').onclick = createSwapRequest;
-  if($('btnRefreshRequests')) $('btnRefreshRequests').onclick = loadMyRequests;
-  if($('btnRefreshSwapData')) $('btnRefreshSwapData').onclick = refreshSwapData;
+  $('btnCreateSwap').onclick = withButtonLoading(createSwapRequest);
+  if($('btnRefreshRequests')) $('btnRefreshRequests').onclick = withButtonLoading(loadMyRequests);
+  if($('btnRefreshSwapData')) $('btnRefreshSwapData').onclick = withButtonLoading(refreshSwapData);
+
+  document.addEventListener('click', e => {
+    const btn = e.target && e.target.closest ? e.target.closest('button') : null;
+    if(!btn || btn.disabled || btn.dataset.loadingBound === '1') return;
+    startButtonLoading(btn);
+    setTimeout(() => stopButtonLoading(btn), 450);
+  }, true);
+}
+
+function sleep(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
+function startButtonLoading(btn){
+  if(!btn || btn.disabled) return;
+  btn.dataset.loadingBound = '1';
+  btn.dataset.loadingCount = String((Number(btn.dataset.loadingCount || 0) || 0) + 1);
+  btn.classList.add('is-loading');
+  btn.setAttribute('aria-busy', 'true');
+}
+function stopButtonLoading(btn){
+  if(!btn) return;
+  const next = Math.max(0, (Number(btn.dataset.loadingCount || 1) || 1) - 1);
+  btn.dataset.loadingCount = String(next);
+  if(next > 0) return;
+  btn.classList.remove('is-loading');
+  btn.removeAttribute('aria-busy');
+  delete btn.dataset.loadingCount;
+  delete btn.dataset.loadingBound;
+}
+function withButtonLoading(handler){
+  return async function(event){
+    const btn = event && event.currentTarget ? event.currentTarget : null;
+    startButtonLoading(btn);
+    const started = Date.now();
+    try{
+      return await handler.call(this, event);
+    }finally{
+      const remain = Math.max(0, 320 - (Date.now() - started));
+      setTimeout(() => stopButtonLoading(btn), remain);
+    }
+  };
 }
 
 async function api(action, data = {}){
@@ -1033,16 +1267,17 @@ function renderRequests(items){
         ${item.lyDo ? `<div><strong>Lý do:</strong> ${esc(item.lyDo)}</div>` : ''}
       </div>
       <div class="btn-row">
-        ${canRespond ? `<button class="btn ok" type="button" onclick="respondRequest('${escAttr(item.requestId)}','DONG_Y')">Đồng ý</button>
-        <button class="btn danger" type="button" onclick="respondRequest('${escAttr(item.requestId)}','TU_CHOI')">Từ chối</button>` : ''}
-        ${canCancel ? `<button class="btn secondary" type="button" onclick="cancelRequest('${escAttr(item.requestId)}')">Hủy đề xuất</button>` : ''}
+        ${canRespond ? `<button class="btn ok" type="button" onclick="respondRequest('${escAttr(item.requestId)}','DONG_Y', this)">Đồng ý</button>
+        <button class="btn danger" type="button" onclick="respondRequest('${escAttr(item.requestId)}','TU_CHOI', this)">Từ chối</button>` : ''}
+        ${canCancel ? `<button class="btn secondary" type="button" onclick="cancelRequest('${escAttr(item.requestId)}', this)">Hủy đề xuất</button>` : ''}
       </div>
     </div>`;
   }).join('');
 }
 
-window.respondRequest = async function(requestId, decision){
+window.respondRequest = async function(requestId, decision, btn){
   if(decision === 'DONG_Y' && !confirm('Sau khi đồng ý, lịch tuần sẽ được cập nhật ngay. Anh/chị chắc chắn đồng ý?')) return;
+  startButtonLoading(btn);
   try{
     const res = await api('respondSwapRequest', { token: state.token, payload: { requestId, decision } });
     setMsg('swapMessage', res.message, 'ok');
@@ -1050,17 +1285,22 @@ window.respondRequest = async function(requestId, decision){
     await loadPublicWeek();
   }catch(e){
     setMsg('swapMessage', e.message, 'err');
+  }finally{
+    stopButtonLoading(btn);
   }
 };
 
-window.cancelRequest = async function(requestId){
+window.cancelRequest = async function(requestId, btn){
   if(!confirm('Hủy đề xuất này?')) return;
+  startButtonLoading(btn);
   try{
     const res = await api('cancelSwapRequest', { token: state.token, payload: { requestId } });
     setMsg('swapMessage', res.message, 'ok');
     await loadMyRequests();
   }catch(e){
     setMsg('swapMessage', e.message, 'err');
+  }finally{
+    stopButtonLoading(btn);
   }
 };
 
