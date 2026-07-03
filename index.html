@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 9.1</title>
-  <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=9.1">
-  <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=9.1">
-  <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=9.1">
-  <link rel="manifest" href="./manifest.json?v=9.1">
-  <meta name="msapplication-TileImage" content="./APP_ICON_LICH_PHAN_CONG_192.png?v=9.1">
+  <title>Lịch phân công công việc PXN - Version 10.1</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=10.1">
+  <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=10.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=10.1">
+  <link rel="manifest" href="./manifest.json?v=10.1">
+  <meta name="msapplication-TileImage" content="./APP_ICON_LICH_PHAN_CONG_192.png?v=10.1">
   <meta name="theme-color" content="#580824">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -581,17 +581,133 @@
       .swap-col-title{font-size:13px!important}
     }
 
+
+    /* ===== PATCH V10.1: HEADER, PRINT, MOBILE GAP, SWAP MOBILE 1 COLUMN ===== */
+    .paper-title{
+      font-weight:700!important;
+      letter-spacing:0!important;
+      color:var(--g-text)!important;
+    }
+    .day-title{
+      color:var(--g-blue)!important;
+      font-weight:700!important;
+      letter-spacing:0!important;
+    }
+    .user-chip{
+      font-size:11.5px!important;
+      line-height:1.2!important;
+      font-weight:400!important;
+      opacity:.92!important;
+      max-width:180px!important;
+    }
+    .brand-title{font-weight:500!important;line-height:1.2!important}
+    .brand-sub{font-size:11.5px!important;line-height:1.25!important;opacity:.92!important;color:#fff!important}
+    @media (max-width:760px){
+      .toolbar-main{
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+        gap:12px!important;
+        column-gap:12px!important;
+        row-gap:8px!important;
+        padding:0!important;
+        align-items:stretch!important;
+      }
+      .toolbar-main input[type="date"],
+      .toolbar-main #btnReload{
+        width:100%!important;
+        min-width:0!important;
+        max-width:100%!important;
+        margin:0!important;
+        box-sizing:border-box!important;
+        display:flex!important;
+      }
+      .swap-layout{
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr)!important;
+        gap:10px!important;
+      }
+      .swap-col{width:100%!important;min-width:0!important}
+      .topbar{gap:8px!important}
+      .brand-title{font-size:13px!important;white-space:normal!important;line-height:1.2!important}
+      .brand-sub{font-size:10.2px!important;white-space:normal!important;line-height:1.2!important}
+      .user-chip{font-size:10px!important;max-width:90px!important}
+    }
+    @media print{
+      @page{size:A4 portrait;margin:8mm}
+      html,body{
+        position:static!important;
+        width:auto!important;
+        height:auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        overflow:visible!important;
+        background:#fff!important;
+        color:#000!important;
+      }
+      body{inset:auto!important;touch-action:auto!important}
+      .app{
+        position:static!important;
+        display:block!important;
+        min-height:0!important;
+        height:auto!important;
+        overflow:visible!important;
+        background:#fff!important;
+      }
+      .topbar,.tabbar,.toolbar,.status-line,.admin-panel,.swap-panel,.paper-print-icon,.modal{
+        display:none!important;
+      }
+      .main{
+        position:static!important;
+        top:auto!important;
+        bottom:auto!important;
+        left:auto!important;
+        right:auto!important;
+        width:auto!important;
+        height:auto!important;
+        max-height:none!important;
+        overflow:visible!important;
+        padding:0!important;
+        background:#fff!important;
+      }
+      [data-tab-content]{display:none!important}
+      [data-tab-content="schedule"]{display:block!important}
+      .layout{
+        display:block!important;
+        max-width:none!important;
+        width:100%!important;
+        margin:0!important;
+        padding:0!important;
+      }
+      .paper-shell{
+        overflow:visible!important;
+        background:#fff!important;
+        border:0!important;
+        padding:0!important;
+        margin:0!important;
+      }
+      .paper{
+        width:100%!important;
+        min-height:0!important;
+        max-width:none!important;
+        margin:0!important;
+        padding:0!important;
+        border:0!important;
+        border-radius:0!important;
+        box-shadow:none!important;
+      }
+    }
+
   </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <div class="brand-title">Lịch phân công công việc PXN</div>
-      
+      <div class="brand-title">Khoa Huyết học và Truyền máu</div>
+      <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
     </div>
     <div class="top-actions">
-      <span id="versionChip" class="version-chip">Version 9.1</span>
+      <span id="versionChip" class="version-chip">Version 10.1</span>
       <span id="userChip" class="user-chip hidden"></span>
       <button id="btnLogin" class="btn primary" type="button">Đăng nhập</button>
       <button id="btnLogout" class="logout-icon-btn hidden" type="button" aria-label="Đăng xuất" title="Đăng xuất"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 19V5a2 2 0 0 0-2-2h-6"/></svg></button>
@@ -725,7 +841,7 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 9;
+const INDEX_VERSION = 10;
 const CODE_VERSION = 1;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -883,7 +999,7 @@ async function login(){
     await loadInitData();
     closeLogin();
     renderAuth();
-    setMsg('statusLine', 'Đã đăng nhập: <strong>' + esc(state.user.tenNhanVien) + '</strong>', '');
+    refreshScheduleStatusLine();
   }catch(e){
     setMsg('loginMessage', e.message, 'err');
   }
@@ -909,9 +1025,10 @@ async function loadInitData(){
 function renderAuth(){
   const logged = !!state.user;
   $('btnLogin').classList.toggle('hidden', logged);
+  $('btnLogin').style.display = logged ? 'none' : '';
   $('btnLogout').classList.toggle('hidden', !logged);
   $('userChip').classList.toggle('hidden', !logged);
-  $('userChip').textContent = logged ? `${state.user.tenNhanVien} (${state.user.maNhanVien})` : '';
+  $('userChip').textContent = logged ? `${state.user.tenNhanVien}` : '';
   const canManage = logged && state.user.canManageSchedule;
   $('tabAdminBtn').classList.toggle('hidden', !canManage);
   $('tabbar').classList.toggle('has-admin', !!canManage);
@@ -939,6 +1056,16 @@ async function loadPublicWeek(){
     renderErrorPaper(e.message);
     $('statusLine').innerHTML = '<span style="color:#b42318">' + esc(e.message) + '</span>';
   }
+}
+
+function refreshScheduleStatusLine(){
+  if(!state.weekData || state.activeTab !== 'schedule') return;
+  if(state.weekData.status === 'EMPTY'){
+    $('statusLine').innerHTML = 'Tuần này chưa có lịch đã công bố. Nếu anh/chị là KTY trưởng, hãy đăng nhập để tạo/công bố lịch.';
+    return;
+  }
+  const updatedText = formatDateTimeHaNoi(state.weekData.publishedAt || state.weekData.updatedAt || '');
+  $('statusLine').innerHTML = updatedText ? `Cập nhật lúc: <strong>${esc(updatedText)}</strong>` : '';
 }
 
 function renderWeekLabel(){
