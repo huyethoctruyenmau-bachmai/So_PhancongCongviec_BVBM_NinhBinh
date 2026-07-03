@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 14.1</title>
+  <title>Lịch phân công công việc PXN - Version 15.1</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=13.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=13.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=13.1">
@@ -768,7 +768,84 @@
     }
 
 
-  </style>
+  
+
+    /* ===== PATCH V15.1: MOBILE TOOLBAR ĐỒNG BỘ + TÊN TRONG BẢNG LUÔN 1 DÒNG ===== */
+    .schedule-table td{
+      white-space:nowrap!important;
+      word-break:normal!important;
+      overflow-wrap:normal!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+    }
+    .schedule-table td .person-name,
+    .schedule-table td .search-hit{
+      display:inline-block!important;
+      max-width:100%!important;
+      white-space:nowrap!important;
+      word-break:normal!important;
+      overflow-wrap:normal!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      vertical-align:middle!important;
+      line-height:inherit!important;
+    }
+    @media (max-width:760px){
+      #mainToolbar .toolbar-main{
+        width:100%!important;
+        display:grid!important;
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        gap:8px!important;
+        column-gap:8px!important;
+        row-gap:8px!important;
+        padding:0!important;
+        margin:0!important;
+        box-sizing:border-box!important;
+        align-items:stretch!important;
+      }
+      #mainToolbar .toolbar-main > *{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        margin:0!important;
+        box-sizing:border-box!important;
+      }
+      #mainToolbar #weekStartInput,
+      #mainToolbar #btnReload{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:38px!important;
+        min-height:38px!important;
+        margin:0!important;
+        border-radius:4px!important;
+        box-sizing:border-box!important;
+        font-size:13px!important;
+        line-height:20px!important;
+      }
+      #mainToolbar #weekStartInput{
+        padding:0 8px!important;
+        border:1px solid var(--g-line)!important;
+        background:#fff!important;
+        color:var(--g-text)!important;
+        font-weight:400!important;
+        -webkit-appearance:none!important;
+        appearance:none!important;
+      }
+      #mainToolbar #btnReload{
+        display:inline-flex!important;
+        align-items:center!important;
+        justify-content:center!important;
+        padding:0 8px!important;
+        white-space:nowrap!important;
+      }
+      #mainToolbar .toolbar-nav{
+        gap:8px!important;
+        column-gap:8px!important;
+        row-gap:8px!important;
+      }
+    }
+</style>
 </head>
 <body>
 <div class="app">
@@ -778,7 +855,7 @@
       <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
     </div>
     <div class="top-actions">
-      <span id="versionChip" class="version-chip">Version 14.1</span>
+      <span id="versionChip" class="version-chip">Version 15.1</span>
       <span id="userChip" class="user-chip hidden"></span>
       <button id="btnLogin" class="btn primary" type="button">Đăng nhập</button>
       <button id="btnLogout" class="logout-icon-btn hidden" type="button" aria-label="Đăng xuất" title="Đăng xuất"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 19V5a2 2 0 0 0-2-2h-6"/></svg></button>
@@ -909,7 +986,7 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 14;
+const INDEX_VERSION = 15;
 const CODE_VERSION = 1;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -1226,7 +1303,7 @@ function renderName(name, lunch, q){
   if(q && (normalizeText(name).includes(normalizeText(q)) || normalizeText(displayName).includes(normalizeText(q)))){
     safe = '<span class="search-hit">' + safe + '</span>';
   }
-  return `<span class="${lunch ? 'lunch' : ''}" title="${escAttr(name)}">${safe}</span>`;
+  return `<span class="person-name ${lunch ? 'lunch' : ''}" title="${escAttr(name)}">${safe}</span>`;
 }
 
 function compactDisplayName(name){
