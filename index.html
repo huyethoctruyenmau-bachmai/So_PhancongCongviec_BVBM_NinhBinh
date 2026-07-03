@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 5.1</title>
+  <title>Lịch phân công công việc PXN - Version 6.1</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=5.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=5.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=5.1">
@@ -321,15 +321,19 @@
     @media print{.paper-print-icon{display:none!important}}
 
 
-    /* ===== PATCH V5.1: MOBILE TÁCH Ô NGÀY VÀ NÚT XEM LỊCH ===== */
+    /* ===== PATCH V6.1: MOBILE TÁCH Ô NGÀY/XEM LỊCH + TẢI THEO TAB ===== */
     @media (max-width:760px){
       .toolbar-main{
         display:grid!important;
         grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
-        column-gap:12px!important;
+        column-gap:10px!important;
         row-gap:8px!important;
         width:100%!important;
         align-items:stretch!important;
+      }
+      .toolbar-main > *{
+        min-width:0!important;
+        box-sizing:border-box!important;
       }
       .toolbar-main input[type="date"],
       .toolbar-main #btnReload{
@@ -357,7 +361,7 @@
       
     </div>
     <div class="top-actions">
-      <span id="versionChip" class="version-chip">Version 5.1</span>
+      <span id="versionChip" class="version-chip">Version 6.1</span>
       <span id="userChip" class="user-chip hidden"></span>
       <button id="btnLogin" class="btn primary" type="button">Đăng nhập</button>
       <button id="btnLogout" class="logout-icon-btn hidden" type="button" aria-label="Đăng xuất" title="Đăng xuất"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 19V5a2 2 0 0 0-2-2h-6"/></svg></button>
@@ -480,7 +484,7 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 5;
+const INDEX_VERSION = 6;
 const CODE_VERSION = 1;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -526,9 +530,9 @@ function init(){
 function bindEvents(){
   $('btnPrevWeek').onclick = () => changeWeek(-7);
   $('btnNextWeek').onclick = () => changeWeek(7);
-  $('btnThisWeek').onclick = () => { state.weekStart = mondayOf(new Date()); syncWeekInput(); loadPublicWeek(); };
-  $('weekStartInput').onchange = () => { state.weekStart = mondayOf(parseIsoDate($('weekStartInput').value)); syncWeekInput(); loadPublicWeek(); };
-  $('btnReload').onclick = loadPublicWeek;
+  $('btnThisWeek').onclick = () => { state.weekStart = mondayOf(new Date()); syncWeekInput(); loadCurrentTabWeek(); };
+  $('weekStartInput').onchange = () => { setWeekFromInput(); };
+  $('btnReload').onclick = () => { setWeekFromInput(); loadCurrentTabWeek(); };
   $('searchName').oninput = renderPaper;
 
   $('btnLogin').onclick = openLogin;
@@ -644,7 +648,8 @@ async function loadPublicWeek(){
     if(state.weekData.status === 'EMPTY'){
       $('statusLine').innerHTML = 'Tuần này chưa có lịch đã công bố. Nếu anh/chị là KTY trưởng, hãy đăng nhập để tạo/công bố lịch.';
     }else{
-      $('statusLine').innerHTML = `Trạng thái lịch: <strong>${esc(statusText(state.weekData.status))}</strong>. Cập nhật lúc: ${esc(state.weekData.publishedAt || '')}`;
+      const updatedText = formatDateTimeHaNoi(state.weekData.publishedAt || state.weekData.updatedAt || '');
+      $('statusLine').innerHTML = updatedText ? `Cập nhật lúc: <strong>${esc(updatedText)}</strong>` : '';
     }
     if(!state.personnel.length && state.token) await loadInitData();
     prepareSwapPanel();
@@ -1041,7 +1046,22 @@ function renderStaffDatalist(){
 function changeWeek(days){
   state.weekStart = addDays(state.weekStart, days);
   syncWeekInput();
-  loadPublicWeek();
+  loadCurrentTabWeek();
+}
+
+function setWeekFromInput(){
+  const selected = $('weekStartInput').value || state.weekStart;
+  state.weekStart = mondayOf(parseIsoDate(selected));
+  syncWeekInput();
+}
+
+function loadCurrentTabWeek(){
+  if(state.activeTab === 'admin' && state.user && state.user.canManageSchedule){
+    state.editData = null;
+    state.activeEditDay = 0;
+    return loadAdminWeek();
+  }
+  return loadPublicWeek();
 }
 
 function syncWeekInput(){
@@ -1089,6 +1109,27 @@ function clearMsg(id){ const el = $(id); if(el) el.innerHTML = ''; }
 
 function showWarnings(id, warnings, okText){
   setMsg(id, esc(okText), 'ok');
+}
+
+function formatDateTimeHaNoi(value){
+  if(!value) return '';
+  const d = new Date(value);
+  if(isNaN(d.getTime())) return String(value || '');
+  try{
+    const parts = new Intl.DateTimeFormat('vi-VN', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour12: false
+    }).formatToParts(d).reduce((acc, p) => { acc[p.type] = p.value; return acc; }, {});
+    return `${parts.hour}:${parts.minute} ${parts.day}/${parts.month}/${parts.year}`;
+  }catch(e){
+    const pad = n => String(n).padStart(2, '0');
+    return `${pad(d.getHours())}:${pad(d.getMinutes())} ${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+  }
 }
 
 function statusText(s){
