@@ -6,7 +6,7 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#f8f1f4",
+  "background_color": "#f8fafd",
   "theme_color": "#580824",
   "icons": [
     {
@@ -34,5 +34,5 @@
       "purpose": "any maskable"
     }
   ],
-  "version": "3.1"
+  "version": "9.1"
 }
