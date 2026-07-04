@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 15.1</title>
-  <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=13.1">
-  <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=13.1">
-  <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=13.1">
+  <title>Lịch phân công công việc PXN - Version 16.1</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
+  <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=16.1">
   <link rel="manifest" href="./manifest.json?v=13.1">
-  <meta name="msapplication-TileImage" content="./APP_ICON_LICH_PHAN_CONG_192.png?v=13.1">
+  <meta name="msapplication-TileImage" content="./APP_ICON_LICH_PHAN_CONG_192.png?v=16.1">
   <meta name="theme-color" content="#580824">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -845,6 +845,60 @@
         row-gap:8px!important;
       }
     }
+
+
+    /* ===== PATCH V16.1: TÊN 2 DÒNG + TĂNG CỠ CHỮ MOBILE ===== */
+    .schedule-table td{
+      white-space:normal!important;
+      word-break:normal!important;
+      overflow-wrap:normal!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+    }
+    .schedule-table td .person-name,
+    .schedule-table td .search-hit{
+      display:inline-flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+      max-width:100%!important;
+      white-space:normal!important;
+      word-break:normal!important;
+      overflow-wrap:normal!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      vertical-align:middle!important;
+      line-height:1.12!important;
+    }
+    .schedule-table td .name-initials,
+    .schedule-table td .name-given{
+      display:block!important;
+      width:100%!important;
+      max-width:100%!important;
+      white-space:nowrap!important;
+      word-break:normal!important;
+      overflow-wrap:normal!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      text-align:center!important;
+      line-height:1.12!important;
+    }
+    .schedule-table td .name-given{font-weight:700!important;}
+    .schedule-table td .name-given.single{font-weight:700!important;}
+    @media (max-width:760px){
+      .paper{padding:12px 5px!important;}
+      .paper-title{font-size:16.5px!important;line-height:1.35!important;}
+      .paper-sub{font-size:12px!important;line-height:1.45!important;}
+      .day-title{font-size:11.2px!important;line-height:1.45!important;margin-bottom:3px!important;}
+      .schedule-table{font-size:9.3px!important;line-height:1.22!important;}
+      .schedule-table th,.schedule-table td{height:25px!important;line-height:1.22!important;padding:3px 1px!important;}
+      .schedule-table td .person-name,
+      .schedule-table td .search-hit{line-height:1.12!important;}
+      .schedule-table td .name-initials,
+      .schedule-table td .name-given{line-height:1.12!important;}
+      .schedule-table .stt{width:18px!important;min-width:18px!important;max-width:18px!important;}
+    }
+
 </style>
 </head>
 <body>
@@ -855,7 +909,7 @@
       <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
     </div>
     <div class="top-actions">
-      <span id="versionChip" class="version-chip">Version 15.1</span>
+      <span id="versionChip" class="version-chip">Version 16.1</span>
       <span id="userChip" class="user-chip hidden"></span>
       <button id="btnLogin" class="btn primary" type="button">Đăng nhập</button>
       <button id="btnLogout" class="logout-icon-btn hidden" type="button" aria-label="Đăng xuất" title="Đăng xuất"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 19V5a2 2 0 0 0-2-2h-6"/></svg></button>
@@ -986,7 +1040,7 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 15;
+const INDEX_VERSION = 16;
 const CODE_VERSION = 1;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -1298,23 +1352,31 @@ function renderHeader(pos, day){
 
 function renderName(name, lunch, q){
   if(!name) return '&nbsp;';
-  const displayName = compactDisplayName(name);
-  let safe = esc(displayName);
-  if(q && (normalizeText(name).includes(normalizeText(q)) || normalizeText(displayName).includes(normalizeText(q)))){
+  const display = compactDisplayNameParts(name);
+  const compactText = display.initials ? (display.initials + ' ' + display.givenName) : display.givenName;
+  let safe = display.initials
+    ? `<span class="name-initials">${esc(display.initials)}</span><span class="name-given">${esc(display.givenName)}</span>`
+    : `<span class="name-given single">${esc(display.givenName)}</span>`;
+  if(q && (normalizeText(name).includes(normalizeText(q)) || normalizeText(compactText).includes(normalizeText(q)))){
     safe = '<span class="search-hit">' + safe + '</span>';
   }
   return `<span class="person-name ${lunch ? 'lunch' : ''}" title="${escAttr(name)}">${safe}</span>`;
 }
 
-function compactDisplayName(name){
+function compactDisplayNameParts(name){
   const parts = String(name || '').trim().replace(/\s+/g, ' ').split(' ').filter(Boolean);
-  if(parts.length <= 1) return parts[0] || '';
-  const lastName = parts[parts.length - 1];
+  if(parts.length <= 1) return { initials: '', givenName: parts[0] || '' };
+  const givenName = parts[parts.length - 1];
   const initials = parts.slice(0, -1).map(part => {
     const first = String(part || '').trim().charAt(0);
     return first ? first.toLocaleUpperCase('vi-VN') : '';
-  }).filter(Boolean);
-  return initials.length ? initials.join('.') + '.' + lastName : lastName;
+  }).filter(Boolean).join('.');
+  return { initials: initials ? initials + '.' : '', givenName };
+}
+
+function compactDisplayName(name){
+  const display = compactDisplayNameParts(name);
+  return display.initials ? display.initials + display.givenName : display.givenName;
 }
 
 function getMaxRows(day){
