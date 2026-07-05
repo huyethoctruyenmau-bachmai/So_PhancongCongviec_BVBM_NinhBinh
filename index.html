@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 41.4</title>
+  <title>Lịch phân công công việc PXN - Version 43.5</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2005,6 +2005,64 @@
       }
     }
 
+
+    /* ===== PATCH V42.4: MOBILE ĐỔI LỊCH - GIỮ ĐÚNG FORM THEO KIỂU ĐỀ XUẤT ===== */
+    @media (max-width:760px){
+      #swapPanel .leave-only.hidden,
+      #swapPanel .leave-date-row.hidden,
+      #swapPanel .swap-only.hidden,
+      #swapPanel #targetAssignmentBox.hidden{
+        display:none!important;
+      }
+      #swapPanel .swap-form-grid{
+        display:flex!important;
+        flex-direction:column!important;
+      }
+      #swapPanel .swap-form-grid > *{
+        order:initial;
+      }
+    }
+
+
+    /* ===== PATCH V43.5: MOBILE TẠO LỊCH - Ô THỨ CHIA ĐỀU + TIÊU ĐỀ BẢNG RÕ HƠN ===== */
+    @media (max-width:760px){
+      #adminPanel #editorTabs{
+        display:grid!important;
+        grid-template-columns:repeat(7,minmax(0,1fr))!important;
+        gap:6px!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        overflow:visible!important;
+        padding-bottom:0!important;
+        box-sizing:border-box!important;
+      }
+      #adminPanel #editorTabs .tab-day{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        min-height:36px!important;
+        padding:5px 2px!important;
+        border-radius:10px!important;
+        font-size:10.8px!important;
+        font-weight:800!important;
+        line-height:1.15!important;
+        text-align:center!important;
+        white-space:normal!important;
+        overflow:hidden!important;
+        text-overflow:clip!important;
+        box-sizing:border-box!important;
+      }
+      #adminPanel .edit-table th{
+        font-size:9px!important;
+        font-weight:800!important;
+        line-height:1.25!important;
+        color:var(--g-text)!important;
+        padding-top:4px!important;
+        padding-bottom:4px!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -2216,7 +2274,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 41.4</div>
+    <div id="versionFooter" class="version-footer">Version 43.5</div>
   </main>
 </div>
 
@@ -2256,8 +2314,8 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 41;
-const CODE_VERSION = 4;
+const INDEX_VERSION = 43;
+const CODE_VERSION = 5;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
 const POSITIONS = [
@@ -3220,7 +3278,7 @@ window.respondRequest = async function(requestId, decision, btn){
 };
 
 window.cancelRequest = async function(requestId, btn){
-  if(!confirm('Hủy đề xuất này?')) return;
+  if(!confirm('Xóa đề xuất này? Nếu đề xuất chưa được ký xác nhận/phê duyệt, đề xuất sẽ bị xóa hẳn khỏi danh sách.')) return;
   startButtonLoading(btn);
   try{
     const res = await api('cancelSwapRequest', { token: state.token, payload: { requestId } });
