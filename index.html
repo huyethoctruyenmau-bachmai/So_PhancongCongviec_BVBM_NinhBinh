@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 39.4</title>
+  <title>Lịch phân công công việc PXN - Version 40.4</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -1812,6 +1812,108 @@
       }
     }
 
+
+    /* ===== PATCH V40.4: MOBILE DATE UI GIỐNG APP MẪU ===== */
+    .vi-date-wrap{
+      position:relative;
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      display:block;
+      box-sizing:border-box;
+    }
+    .vi-date-display{
+      display:none;
+    }
+    .vi-date-wrap input.vi-date-native{
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      box-sizing:border-box;
+    }
+    @media (max-width:760px){
+      #swapPanel .vi-date-wrap,
+      #proposalListPanel .vi-date-wrap{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        display:block!important;
+        position:relative!important;
+        box-sizing:border-box!important;
+      }
+      #swapPanel .vi-date-wrap .vi-date-display,
+      #proposalListPanel .vi-date-wrap .vi-date-display{
+        display:block!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:42px!important;
+        min-height:42px!important;
+        padding:6px 42px 6px 9px!important;
+        font-size:15.5px!important;
+        line-height:20px!important;
+        letter-spacing:.1px!important;
+        text-align:left!important;
+        background:#fff!important;
+        color:var(--g-text)!important;
+        cursor:pointer!important;
+        border:1px solid var(--g-line)!important;
+        border-radius:8px!important;
+        box-sizing:border-box!important;
+      }
+      #swapPanel .leave-inline-field .vi-date-wrap .vi-date-display{
+        height:36px!important;
+        min-height:36px!important;
+        font-size:13px!important;
+        padding:4px 36px 4px 5px!important;
+        border-radius:7px!important;
+      }
+      #swapPanel .vi-date-wrap input.vi-date-native,
+      #proposalListPanel .vi-date-wrap input.vi-date-native{
+        position:absolute!important;
+        inset:0!important;
+        width:100%!important;
+        height:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+        opacity:0!important;
+        z-index:2!important;
+        cursor:pointer!important;
+        margin:0!important;
+        padding:0!important;
+        border:0!important;
+        box-shadow:none!important;
+      }
+      #swapPanel .vi-date-wrap::after,
+      #proposalListPanel .vi-date-wrap::after{
+        content:"";
+        position:absolute;
+        right:12px;
+        top:50%;
+        transform:translateY(-50%);
+        z-index:1;
+        pointer-events:none;
+        width:16px;
+        height:16px;
+        background:currentColor;
+        opacity:.72;
+        -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='5' width='16' height='15' rx='2'/%3E%3Cpath d='M8 3v4M16 3v4M4 9h16'/%3E%3C/svg%3E") center/contain no-repeat;
+        mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='5' width='16' height='15' rx='2'/%3E%3Cpath d='M8 3v4M16 3v4M4 9h16'/%3E%3C/svg%3E") center/contain no-repeat;
+      }
+      #swapPanel .leave-inline-field .vi-date-wrap::after{
+        right:9px;
+        width:15px;
+        height:15px;
+      }
+      #swapPanel .swap-field,
+      #swapPanel .leave-inline-field,
+      #proposalListPanel .proposal-filter-field{
+        min-width:0!important;
+        max-width:100%!important;
+        box-sizing:border-box!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -1891,7 +1993,7 @@
             </div>
             <div class="swap-field swap-only">
               <label>Ngày đổi</label>
-              <input id="swapDate" type="date">
+              <input id="swapDate" class="date-vi-input" type="date">
             </div>
             <div class="swap-field swap-only">
               <label>Vị trí của tôi cần đổi</label>
@@ -1915,7 +2017,7 @@
               </div>
               <div class="leave-inline-field">
                 <label>Ngày</label>
-                <input id="leaveFromDate" type="date">
+                <input id="leaveFromDate" class="date-vi-input" type="date">
               </div>
               <div class="leave-inline-field">
                 <label>Nghỉ đến hết</label>
@@ -1926,7 +2028,7 @@
               </div>
               <div class="leave-inline-field">
                 <label>Ngày</label>
-                <input id="leaveToDate" type="date">
+                <input id="leaveToDate" class="date-vi-input" type="date">
               </div>
             </div>
             <div class="swap-field swap-field-full">
@@ -1978,11 +2080,11 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
           <div class="proposal-filter-grid">
             <div class="proposal-filter-field">
               <label>Từ ngày</label>
-              <input id="proposalFilterFromDate" type="date">
+              <input id="proposalFilterFromDate" class="date-vi-input" type="date">
             </div>
             <div class="proposal-filter-field">
               <label>Đến ngày</label>
-              <input id="proposalFilterToDate" type="date">
+              <input id="proposalFilterToDate" class="date-vi-input" type="date">
             </div>
             <div class="proposal-filter-field">
               <label>Loại đề xuất</label>
@@ -2023,7 +2125,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 39.4</div>
+    <div id="versionFooter" class="version-footer">Version 40.4</div>
   </main>
 </div>
 
@@ -2063,7 +2165,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 39;
+const INDEX_VERSION = 40;
 const CODE_VERSION = 4;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -2109,12 +2211,14 @@ const state = {
 };
 
 const $ = id => document.getElementById(id);
+const $$ = (sel, root = document) => Array.from((root || document).querySelectorAll(sel));
 
 document.addEventListener('DOMContentLoaded', init);
 
 function init(){
   hideLoginLoading();
   bindEvents();
+  setupViDatePickerObserver();
   updateTabChrome('schedule');
   if($('versionChip')) $('versionChip').textContent = 'Version ' + APP_VERSION;
   if($('versionFooter')) $('versionFooter').textContent = 'Version ' + APP_VERSION;
@@ -2169,6 +2273,88 @@ function bindEvents(){
     startButtonLoading(btn);
     setTimeout(() => stopButtonLoading(btn), 450);
   }, true);
+}
+
+
+let viDatePickerEnhanceTimer = null;
+let viDatePickerObserver = null;
+
+function setupViDatePickerObserver(){
+  scheduleViDatePickerEnhance();
+  if(!viDatePickerObserver && window.MutationObserver && document.body){
+    viDatePickerObserver = new MutationObserver(() => scheduleViDatePickerEnhance());
+    viDatePickerObserver.observe(document.body, { childList:true, subtree:true });
+  }
+  window.addEventListener('resize', refreshViDatePickers, { passive:true });
+}
+
+function scheduleViDatePickerEnhance(){
+  clearTimeout(viDatePickerEnhanceTimer);
+  viDatePickerEnhanceTimer = setTimeout(() => {
+    enhanceViDatePickers(document);
+    refreshViDatePickers();
+  }, 0);
+}
+
+function enhanceViDatePickers(root){
+  const scope = root || document;
+  $$('.date-vi-input[type="date"]', scope).forEach(input => {
+    if(input.dataset.viEnhanced === '1'){
+      updateViDateDisplay(input);
+      return;
+    }
+    input.dataset.viEnhanced = '1';
+    input.classList.add('vi-date-native');
+
+    const wrap = document.createElement('div');
+    wrap.className = 'vi-date-wrap';
+    const display = document.createElement('input');
+    display.type = 'text';
+    display.className = 'equal-control vi-date-display';
+    display.readOnly = true;
+    display.setAttribute('aria-label', input.getAttribute('aria-label') || input.id || 'Chọn ngày');
+    display.setAttribute('autocomplete', 'off');
+    display.placeholder = 'dd/mm/yyyy';
+
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(display);
+    wrap.appendChild(input);
+
+    const openNativePicker = () => {
+      try{
+        if(input.showPicker) input.showPicker();
+        else input.click();
+      }catch(e){
+        input.focus();
+        input.click();
+      }
+    };
+
+    display.addEventListener('click', openNativePicker);
+    display.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        openNativePicker();
+      }
+    });
+    input.addEventListener('input', () => updateViDateDisplay(input));
+    input.addEventListener('change', () => updateViDateDisplay(input));
+    updateViDateDisplay(input);
+  });
+}
+
+function refreshViDatePickers(){
+  $$('.vi-date-native').forEach(updateViDateDisplay);
+}
+
+function updateViDateDisplay(input){
+  if(!input || !input.parentElement) return;
+  const display = input.parentElement.querySelector('.vi-date-display');
+  if(!display) return;
+  display.value = input.value ? dateVi(input.value) : '';
+  display.placeholder = 'dd/mm/yyyy';
+  display.disabled = !!input.disabled;
+  input.parentElement.classList.toggle('is-disabled', !!input.disabled);
 }
 
 function sleep(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -3224,6 +3410,7 @@ function showTab(tab){
   if(tab === 'admin' && !state.editData){
     loadAdminWeek();
   }
+  refreshViDatePickers();
 }
 
 async function loadAccountInfo(){
