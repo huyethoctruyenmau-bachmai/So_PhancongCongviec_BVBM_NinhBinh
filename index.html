@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 19.2</title>
+  <title>Lịch phân công công việc PXN - Version 20.2</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=16.1">
@@ -948,7 +948,7 @@
     }
 
 
-    /* ===== PATCH V19.2: HEADER LOGO BVBM ===== */
+    /* ===== PATCH V20.2: AUTH HEADER VISIBILITY ===== */
     .version-footer{
       width:100%;text-align:center;color:var(--muted);font-size:12px;line-height:1.4;
       padding:12px 0 4px;margin:0 auto;
@@ -1086,13 +1086,41 @@
       }
     }
 
+    /* ===== PATCH V20.2: ẨN ĐĂNG XUẤT KHI CHƯA ĐĂNG NHẬP + ẨN USER TRÊN ĐIỆN THOẠI ===== */
+    #btnLogout.hidden,
+    #btnLogout[hidden],
+    body:not(.is-logged-in) #btnLogout{
+      display:none!important;
+      visibility:hidden!important;
+      pointer-events:none!important;
+    }
+    body.is-logged-in #btnLogin{
+      display:none!important;
+      visibility:hidden!important;
+      pointer-events:none!important;
+    }
+    @media (max-width:760px){
+      #userChip,
+      .user-chip{
+        display:none!important;
+        visibility:hidden!important;
+        max-width:0!important;
+        width:0!important;
+        overflow:hidden!important;
+      }
+      .top-actions{
+        flex:0 0 auto!important;
+        gap:4px!important;
+      }
+    }
+
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <img class="brand-logo" src="./APP_LOGO_BVBM.png?v=19.2" alt="Logo Bệnh viện Bạch Mai">
+      <img class="brand-logo" src="./APP_LOGO_BVBM.png?v=20.2" alt="Logo Bệnh viện Bạch Mai">
       <div class="brand-text">
         <div class="brand-title">Khoa Huyết học và Truyền máu</div>
         <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
@@ -1210,7 +1238,7 @@
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 19.2</div>
+    <div id="versionFooter" class="version-footer">Version 20.2</div>
   </main>
 </div>
 
@@ -1444,6 +1472,8 @@ function renderAuth(){
   $('btnLogin').setAttribute('aria-hidden', logged ? 'true' : 'false');
   $('btnLogout').classList.toggle('hidden', !logged);
   $('btnLogout').hidden = !logged;
+  $('btnLogout').style.display = logged ? 'inline-grid' : 'none';
+  $('btnLogout').setAttribute('aria-hidden', logged ? 'false' : 'true');
   $('userChip').classList.toggle('hidden', !logged);
   $('userChip').textContent = logged ? compactDisplayName(state.user.tenNhanVien || state.user.maNhanVien || '') : '';
   if(logged) closeLogin();
