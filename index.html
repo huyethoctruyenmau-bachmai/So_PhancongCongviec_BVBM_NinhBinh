@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 32.4</title>
+  <title>Lịch phân công công việc PXN - Version 33.4</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -1549,6 +1549,22 @@
       .login-loading-logo{width:300px;height:300px}
     }
 
+
+    /* ===== PATCH V33.4: TÊN TAB GỌN HƠN TRÊN ĐIỆN THOẠI ===== */
+    @media (max-width:760px){
+      .tab-btn{
+        font-size:11.2px!important;
+        letter-spacing:-.1px!important;
+      }
+      .tab-btn .ico{
+        font-size:18px!important;
+      }
+      .tab-btn .ico .icon2d{
+        width:19px!important;
+        height:19px!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -1570,10 +1586,10 @@
 
   <nav id="tabbar" class="tabbar" aria-label="Điều hướng chính">
     <button class="tab-btn" data-tab="account" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span>Tài khoản</span></button>
-    <button class="tab-btn active" data-tab="schedule" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span><span>Lịch công việc</span></button>
+    <button class="tab-btn active" data-tab="schedule" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span><span>Lịch CV</span></button>
     <button class="tab-btn" data-tab="swap" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3-3"/><path d="M18 7l-3 3"/><path d="M17 17H6l3 3"/><path d="M6 17l3-3"/></svg></span><span>Đổi lịch</span></button>
     <button id="tabAdminBtn" class="tab-btn hidden" data-tab="admin" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span>Tạo lịch</span></button>
-    <button class="tab-btn" data-tab="proposalList" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span>Danh sách đề xuất</span></button>
+    <button class="tab-btn" data-tab="proposalList" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span>DS đề xuất</span></button>
   </nav>
 
   <main class="main">
@@ -1760,7 +1776,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 32.4</div>
+    <div id="versionFooter" class="version-footer">Version 33.4</div>
   </main>
 </div>
 
@@ -1800,7 +1816,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 32;
+const INDEX_VERSION = 33;
 const CODE_VERSION = 4;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
