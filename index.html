@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 40.4</title>
+  <title>Lịch phân công công việc PXN - Version 41.4</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -1914,6 +1914,97 @@
       }
     }
 
+
+    /* ===== PATCH V41.4: MOBILE - NGÀY SINH + MẪU ĐỔI VỊ TRÍ/NHỜ LÀM HỘ ===== */
+    @media (max-width:760px){
+      /* Ô ngày sinh trong Sửa thông tin tài khoản dùng cùng mẫu ô ngày */
+      #accountPanel .vi-date-wrap{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        display:block!important;
+        position:relative!important;
+        box-sizing:border-box!important;
+      }
+      #accountPanel .vi-date-wrap .vi-date-display{
+        display:block!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:42px!important;
+        min-height:42px!important;
+        padding:6px 42px 6px 9px!important;
+        font-size:16px!important;
+        line-height:20px!important;
+        text-align:left!important;
+        background:#fff!important;
+        color:var(--g-text)!important;
+        cursor:pointer!important;
+        border:1px solid var(--g-line)!important;
+        border-radius:8px!important;
+        box-sizing:border-box!important;
+      }
+      #accountPanel .vi-date-wrap input.vi-date-native{
+        position:absolute!important;
+        inset:0!important;
+        width:100%!important;
+        height:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+        opacity:0!important;
+        z-index:2!important;
+        cursor:pointer!important;
+        margin:0!important;
+        padding:0!important;
+        border:0!important;
+        box-shadow:none!important;
+      }
+      #accountPanel .vi-date-wrap::after{
+        content:"";
+        position:absolute;
+        right:12px;
+        top:50%;
+        transform:translateY(-50%);
+        z-index:1;
+        pointer-events:none;
+        width:16px;
+        height:16px;
+        background:currentColor;
+        opacity:.72;
+        -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='5' width='16' height='15' rx='2'/%3E%3Cpath d='M8 3v4M16 3v4M4 9h16'/%3E%3C/svg%3E") center/contain no-repeat;
+        mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='5' width='16' height='15' rx='2'/%3E%3Cpath d='M8 3v4M16 3v4M4 9h16'/%3E%3C/svg%3E") center/contain no-repeat;
+      }
+
+      /* Tab Đổi lịch: ép mẫu Đổi vị trí/Nhờ làm hộ về 1 cột, đúng thứ tự form */
+      #swapPanel .swap-form-grid{
+        display:flex!important;
+        flex-direction:column!important;
+        gap:10px!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+      }
+      #swapPanel .swap-form-grid > .swap-field,
+      #swapPanel .swap-form-grid > .leave-date-row{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        box-sizing:border-box!important;
+      }
+      #swapPanel .swap-field input,
+      #swapPanel .swap-field select,
+      #swapPanel .swap-field .vi-date-wrap,
+      #swapPanel .swap-field .vi-date-display{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        box-sizing:border-box!important;
+      }
+      #swapPanel #targetAssignmentBox.hidden{
+        display:none!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -2125,7 +2216,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 40.4</div>
+    <div id="versionFooter" class="version-footer">Version 41.4</div>
   </main>
 </div>
 
@@ -2165,7 +2256,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 40;
+const INDEX_VERSION = 41;
 const CODE_VERSION = 4;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -3475,7 +3566,7 @@ function renderAccountEditHtml(info){
   return `
     <h2 class="card-title" style="margin-top:0">Sửa thông tin tài khoản</h2>
     <div class="account-form-lite">
-      <div><label>Ngày sinh</label><input id="editAccNgaySinh" type="date" value="${escAttr(info.ngaySinhIso || toIsoDateInput(info.ngaySinh || ''))}"></div>
+      <div><label>Ngày sinh</label><input id="editAccNgaySinh" class="date-vi-input" type="date" value="${escAttr(info.ngaySinhIso || toIsoDateInput(info.ngaySinh || ''))}"></div>
       <div><label>Email</label><input id="editAccEmail" type="email" value="${escAttr(info.email || '')}" placeholder="Nhập email"></div>
       <div><label>Chức danh</label><select id="editAccChucDanh">${optionHtml(opts.listChucDanh || [], info.chucDanh || info.chucDanhHienThi || '')}</select></div>
       <div><label>Khoa/phòng</label><select id="editAccKhoaPhong">${optionHtml(opts.listPhongBan || [], info.khoaPhong || info.phongLamViec || '')}</select></div>
