@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 28.3</title>
+  <title>Lịch phân công công việc PXN - Version 29.3</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=16.1">
@@ -1464,6 +1464,82 @@
     /* ===== PATCH V28.3: PHÂN QUYỀN NÚT TRONG TAB DANH SÁCH ĐỀ XUẤT ===== */
     .proposal-history-item .btn-row{justify-content:flex-start;margin-top:10px;}
 
+
+    /* ===== PATCH V29.3: LOADING SAU ĐĂNG NHẬP GIỐNG APP MẪU + FONT ARIAL ===== */
+    .login-loading-overlay{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background-color:#ffffff;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:9999;
+      transition:opacity .3s ease;
+      text-align:center;
+      color:#202124;
+      font-family:Arial,sans-serif!important;
+      background-image:
+        radial-gradient(circle at 15% 50%,rgba(0,91,170,.1) 0%,rgba(0,91,170,0) 25%),
+        radial-gradient(circle at 85% 30%,rgba(32,201,151,.1) 0%,rgba(32,201,151,0) 20%),
+        radial-gradient(circle at 25% 80%,rgba(0,91,170,.05) 0%,rgba(0,91,170,0) 20%);
+      animation:float-particles 20s linear infinite;
+    }
+    .login-loading-logo{
+      position:relative;
+      width:300px;
+      height:300px;
+      margin-bottom:25px;
+      overflow:hidden;
+      border-radius:15px;
+      background:transparent;
+    }
+    .login-loading-logo img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:contain;
+    }
+    .login-loading-logo::after{
+      content:"";
+      position:absolute;
+      top:0;
+      left:-150%;
+      width:100%;
+      height:100%;
+      background:linear-gradient(to right,transparent 0%,rgba(255,255,255,.4) 50%,transparent 100%);
+      transform:skewX(-25deg);
+      animation:shimmer-fixed 2.5s infinite cubic-bezier(.4,0,.2,1);
+    }
+    .login-loading-text{
+      font-family:Arial,sans-serif!important;
+      font-size:20px;
+      font-weight:bold;
+      color:#333;
+      margin:0 0 10px;
+    }
+    .login-loading-progress{
+      font-family:Arial,sans-serif!important;
+      font-size:24px;
+      font-weight:bold;
+      color:#005baa;
+      min-height:28px;
+    }
+    .login-loading-sub{
+      font-family:Arial,sans-serif!important;
+      font-size:13px;
+      color:#5f6368;
+      margin-top:6px;
+    }
+    @keyframes shimmer-fixed{100%{left:150%}}
+    @keyframes float-particles{0%{background-position:0% 0%}100%{background-position:100% 200%}}
+    @media(max-width:760px){
+      .login-loading-logo{width:300px;height:300px}
+    }
+
 </style>
 </head>
 <body>
@@ -1665,7 +1741,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 28.3</div>
+    <div id="versionFooter" class="version-footer">Version 29.3</div>
   </main>
 </div>
 
@@ -1690,6 +1766,13 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   </div>
 </div>
 
+<div id="loginLoadingOverlay" class="login-loading-overlay hidden">
+  <div class="login-loading-logo"><img src="./APP_LOGO_BVBM.png?v=29.3" alt="Logo Bệnh viện Bạch Mai"></div>
+  <p class="login-loading-text" id="loginLoadingText">Đang tải dữ liệu...</p>
+  <div class="login-loading-progress" id="loginLoadingProgress">0%</div>
+  <div class="login-loading-sub">Vui lòng chờ trong giây lát</div>
+</div>
+
 <datalist id="staffOptions"></datalist>
 
 <script>
@@ -1698,7 +1781,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 28;
+const INDEX_VERSION = 29;
 const CODE_VERSION = 3;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -1731,7 +1814,16 @@ const state = {
   accountOptions: null,
   accountView: 'info',
   proposalListItems: [],
-  pendingLeaveApproval: null
+  myRequests: [],
+  pendingLeaveApproval: null,
+  preload: {
+    init:false,
+    publicWeek:false,
+    adminWeek:false,
+    requests:false,
+    proposals:false,
+    account:false
+  }
 };
 
 const $ = id => document.getElementById(id);
@@ -1739,6 +1831,7 @@ const $ = id => document.getElementById(id);
 document.addEventListener('DOMContentLoaded', init);
 
 function init(){
+  hideLoginLoading();
   bindEvents();
   updateTabChrome('schedule');
   if($('versionChip')) $('versionChip').textContent = 'Version ' + APP_VERSION;
@@ -1825,6 +1918,57 @@ function withButtonLoading(handler){
   };
 }
 
+
+function showLoginLoading(progress=0, text='Đang tải dữ liệu...'){
+  const overlay = $('loginLoadingOverlay');
+  if(!overlay) return;
+  const textEl = $('loginLoadingText');
+  const progressEl = $('loginLoadingProgress');
+  if(textEl) textEl.textContent = text || 'Đang tải dữ liệu...';
+  if(progressEl) progressEl.textContent = Math.max(0, Math.min(100, Number(progress) || 0)) + '%';
+  overlay.classList.remove('hidden');
+}
+function hideLoginLoading(){
+  const overlay = $('loginLoadingOverlay');
+  if(overlay) overlay.classList.add('hidden');
+}
+function resetPreloadState(){
+  state.preload = {
+    init:false,
+    publicWeek:false,
+    adminWeek:false,
+    requests:false,
+    proposals:false,
+    account:false
+  };
+  state.myRequests = [];
+  state.proposalListItems = [];
+}
+async function preloadAllTabsAfterLogin(){
+  showLoginLoading(20, 'Đăng nhập thành công');
+  showLoginLoading(35, 'Đang tải dữ liệu tài khoản...');
+  await loadInitData();
+
+  showLoginLoading(50, 'Đang tải lịch công việc...');
+  await loadPublicWeek();
+
+  showLoginLoading(65, 'Đang tải đề xuất cần ký xác nhận...');
+  prepareSwapPanel();
+  await loadMyRequests();
+
+  showLoginLoading(78, 'Đang tải danh sách đề xuất...');
+  await loadProposalList();
+
+  showLoginLoading(88, 'Đang tải tab tài khoản...');
+  await loadAccountInfo();
+
+  if(state.user && state.user.canManageSchedule){
+    showLoginLoading(94, 'Đang tải dữ liệu tạo lịch...');
+    await loadAdminWeek();
+  }
+  showLoginLoading(100, 'Hoàn tất');
+}
+
 async function api(action, data = {}){
   if(!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes('DAN_URL_WEB_APP_EXEC')){
     throw new Error('Chưa cấu hình GAS_WEB_APP_URL trong index.html.');
@@ -1860,18 +2004,27 @@ async function restoreSession(){
 async function login(){
   clearMsg('loginMessage');
   try{
-    setMsg('loginMessage', 'Đang đăng nhập...', 'warn');
     const username = $('loginUser').value.trim();
     const password = $('loginPass').value.trim();
+    if(!username || !password){
+      setMsg('loginMessage', 'Vui lòng nhập mã nhân viên và mật khẩu.', 'err');
+      return;
+    }
+    setMsg('loginMessage', 'Đang kiểm tra tài khoản...', 'warn');
     const res = await api('login', { payload: { maNhanVien: username, matKhau: password } });
     state.token = res.data.token;
     state.user = res.data.user;
     localStorage.setItem(TOKEN_KEY, state.token);
-    await loadInitData();
+    resetPreloadState();
+    showLoginLoading(12, 'Đăng nhập thành công');
+    await preloadAllTabsAfterLogin();
     closeLogin();
     renderAuth();
+    showTab('schedule');
     refreshScheduleStatusLine();
+    setTimeout(hideLoginLoading, 350);
   }catch(e){
+    hideLoginLoading();
     setMsg('loginMessage', e.message, 'err');
   }
 }
@@ -1884,6 +2037,8 @@ async function logout(){
   state.accountInfo = null;
   state.accountOptions = null;
   state.accountView = 'info';
+  resetPreloadState();
+  hideLoginLoading();
   renderAccountTab();
   localStorage.removeItem(TOKEN_KEY);
   showTab('schedule');
@@ -1898,6 +2053,8 @@ async function loadInitData(){
   state.accountOptions = res.data.setupOptions || state.accountOptions;
   renderStaffDatalist();
   renderAccountTab();
+  state.preload.init = true;
+  state.preload.account = true;
 }
 
 function renderAuth(){
@@ -1937,6 +2094,7 @@ async function loadPublicWeek(){
     }
     if(!state.personnel.length && state.token) await loadInitData();
     prepareSwapPanel();
+    state.preload.publicWeek = true;
   }catch(e){
     renderErrorPaper(e.message);
     $('statusLine').innerHTML = '<span style="color:#b42318">' + esc(e.message) + '</span>';
@@ -2089,6 +2247,7 @@ async function loadAdminWeek(){
     const res = await api('getWeekScheduleForAdmin', { token: state.token, payload: { weekStart: state.weekStart } });
     state.editData = JSON.parse(JSON.stringify(res.data));
     renderEditor();
+    state.preload.adminWeek = true;
     clearMsg('adminMessage');
   }catch(e){
     setMsg('adminMessage', e.message, 'err');
@@ -2325,7 +2484,9 @@ async function loadMyRequests(){
   if(!state.user) return;
   try{
     const res = await api('getMySwapRequests', { token: state.token });
-    renderRequests(res.data.items || []);
+    state.myRequests = res.data.items || [];
+    state.preload.requests = true;
+    renderRequests(state.myRequests);
   }catch(e){
     setMsg('swapMessage', e.message, 'err');
   }
@@ -2366,7 +2527,9 @@ async function loadProposalList(){
   if(box) box.innerHTML = '<div class="loading">Đang tải danh sách đề xuất...</div>';
   try{
     const res = await api('getMySwapRequests', { token: state.token });
-    renderProposalList(res.data.items || []);
+    state.proposalListItems = res.data.items || [];
+    state.preload.proposals = true;
+    renderProposalList(state.proposalListItems);
   }catch(e){
     if(box) box.innerHTML = '<div class="empty">Không tải được danh sách đề xuất.</div>';
     setMsg('proposalListMessage', e.message, 'err');
@@ -2689,15 +2852,28 @@ function showTab(tab){
   if(target) target.classList.remove('hidden');
   if(tab === 'account'){
     renderAccountTab();
-    loadAccountInfo().catch(e => setMsg('accountContent', e.message, 'err'));
+    if(!state.preload.account){
+      loadAccountInfo().catch(e => setMsg('accountContent', e.message, 'err'));
+    }
   }
   if(tab === 'swap'){
-    if(!state.weekData) loadPublicWeek().then(() => prepareSwapPanel()).catch(() => {});
-    prepareSwapPanel();
-    loadMyRequests();
+    if(!state.weekData){
+      loadPublicWeek().then(() => { prepareSwapPanel(); if(!state.preload.requests) loadMyRequests(); }).catch(() => {});
+    }else{
+      prepareSwapPanel();
+    }
+    if(state.preload.requests){
+      renderRequests(state.myRequests || []);
+    }else{
+      loadMyRequests();
+    }
   }
   if(tab === 'proposalList'){
-    loadProposalList();
+    if(state.preload.proposals){
+      renderProposalList(state.proposalListItems || []);
+    }else{
+      loadProposalList();
+    }
   }
   if(tab === 'admin' && !state.editData){
     loadAdminWeek();
@@ -2713,6 +2889,7 @@ async function loadAccountInfo(){
     state.user.canManageSchedule = !!res.data.permissions.canManageSchedule;
     state.user.isAdmin = !!res.data.permissions.isAdmin;
   }
+  state.preload.account = true;
   renderAccountTab();
 }
 
