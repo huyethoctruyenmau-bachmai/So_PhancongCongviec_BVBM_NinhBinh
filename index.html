@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 25.3</title>
+  <title>Lịch phân công công việc PXN - Version 28.3</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=16.1">
@@ -1392,6 +1392,78 @@
       .proposal-view-btn{height:42px!important;min-height:42px!important;font-size:15.5px!important;}
     }
 
+
+    /* ===== PATCH V26.3: TOÀN APP ARIAL + TIÊU ĐỀ TAB KHÔNG KHUNG/NỀN ===== */
+    html,body,.app,.topbar,.main,.tabbar,.modal,.card,.paper,
+    button,input,select,textarea,label,div,span,p,h1,h2,h3,h4,h5,h6,table,th,td,a,small,strong{
+      font-family:Arial,sans-serif!important;
+    }
+    .card-title,
+    .swap-col-title,
+    .proposal-list-title{
+      font-family:Arial,sans-serif!important;
+      text-transform:uppercase!important;
+      font-weight:700!important;
+      color:var(--g-text)!important;
+      letter-spacing:0!important;
+      background:transparent!important;
+      border:0!important;
+      border-left:0!important;
+      border-radius:0!important;
+      padding:0!important;
+      margin:0 0 12px!important;
+      line-height:1.35!important;
+      box-shadow:none!important;
+    }
+    .swap-col-title{
+      display:block!important;
+      font-size:16px!important;
+      text-align:left!important;
+    }
+    .proposal-list-title{
+      flex:1 1 auto!important;
+      font-size:18px!important;
+      margin-bottom:0!important;
+    }
+    .tab-btn span:last-child{
+      font-family:Arial,sans-serif!important;
+      text-transform:uppercase!important;
+      font-weight:700!important;
+      letter-spacing:0!important;
+    }
+    @media(max-width:760px){
+      .card-title,
+      .swap-col-title,
+      .proposal-list-title{
+        font-size:16px!important;
+        padding:0!important;
+        margin-bottom:10px!important;
+      }
+      .proposal-list-title{margin-bottom:0!important;}
+    }
+
+
+    /* ===== PATCH V27.3: DS ĐỀ XUẤT HIỂN THỊ 1 ĐỀ XUẤT / 1 DÒNG ===== */
+    .proposal-list,
+    .proposal-list-card .proposal-list{
+      display:grid!important;
+      grid-template-columns:1fr!important;
+      gap:10px!important;
+      width:100%!important;
+    }
+    .proposal-list .request-item,
+    .proposal-list-card .proposal-list .request-item,
+    .proposal-history-item{
+      width:100%!important;
+      max-width:100%!important;
+      grid-column:1 / -1!important;
+      margin:0!important;
+      box-sizing:border-box!important;
+    }
+
+    /* ===== PATCH V28.3: PHÂN QUYỀN NÚT TRONG TAB DANH SÁCH ĐỀ XUẤT ===== */
+    .proposal-history-item .btn-row{justify-content:flex-start;margin-top:10px;}
+
 </style>
 </head>
 <body>
@@ -1593,7 +1665,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 25.3</div>
+    <div id="versionFooter" class="version-footer">Version 28.3</div>
   </main>
 </div>
 
@@ -1626,7 +1698,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 25;
+const INDEX_VERSION = 28;
 const CODE_VERSION = 3;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -2313,7 +2385,12 @@ function renderProposalList(items){
   box.innerHTML = items.map(item => {
     const roleText = item.isRequester ? 'Tôi tạo đề xuất' : 'Gửi đến tôi';
     const timeText = item.respondedAt ? `Tạo: ${formatDateTimeVi(item.createdAt) || item.createdAt || ''} · Xử lý: ${formatDateTimeVi(item.respondedAt) || item.respondedAt || ''}` : `Tạo: ${formatDateTimeVi(item.createdAt) || item.createdAt || ''}`;
-    const canCancel = item.isRequester && (item.trangThai === 'CHO_XAC_NHAN' || item.trangThai === 'CHO_PHE_DUYET');
+    const isPending = item.trangThai === 'CHO_XAC_NHAN' || item.trangThai === 'CHO_PHE_DUYET';
+    const canCancel = item.isRequester && isPending;
+    const canRespond = item.isReceiver && isPending;
+    const actionHtml = canRespond
+      ? `<div class="btn-row"><button class="btn ok" type="button" onclick="respondRequest('${escAttr(item.requestId)}','DONG_Y', this)">Đồng ý</button><button class="btn danger" type="button" onclick="respondRequest('${escAttr(item.requestId)}','TU_CHOI', this)">Từ chối</button></div>`
+      : (canCancel ? `<div class="btn-row"><button class="btn secondary" type="button" onclick="cancelRequest('${escAttr(item.requestId)}', this)">Xóa đề xuất</button></div>` : '');
     return `<div class="request-item proposal-history-item">
       <div class="request-head">
         <div>
@@ -2328,7 +2405,7 @@ function renderProposalList(items){
         <div><strong>Người nhận/phê duyệt:</strong> ${esc(item.nguoiNhanTen || '')}</div>
         ${renderRequestDetailHtml(item)}
       </div>
-      ${canCancel ? `<div class="btn-row"><button class="btn secondary" type="button" onclick="cancelRequest('${escAttr(item.requestId)}', this)">Hủy đề xuất</button></div>` : ''}
+      ${actionHtml}
     </div>`;
   }).join('');
 }
@@ -2344,11 +2421,13 @@ window.respondRequest = async function(requestId, decision, btn){
       return;
     }
     setMsg('swapMessage', res.message, 'ok');
+    if(state.activeTab === 'proposalList') setMsg('proposalListMessage', res.message, 'ok');
     await loadMyRequests();
     await loadPublicWeek();
     if(state.activeTab === 'proposalList') await loadProposalList();
   }catch(e){
     setMsg('swapMessage', e.message, 'err');
+    if(state.activeTab === 'proposalList') setMsg('proposalListMessage', e.message, 'err');
   }finally{
     stopButtonLoading(btn);
   }
@@ -2360,10 +2439,12 @@ window.cancelRequest = async function(requestId, btn){
   try{
     const res = await api('cancelSwapRequest', { token: state.token, payload: { requestId } });
     setMsg('swapMessage', res.message, 'ok');
+    if(state.activeTab === 'proposalList') setMsg('proposalListMessage', res.message, 'ok');
     await loadMyRequests();
     if(state.activeTab === 'proposalList') await loadProposalList();
   }catch(e){
     setMsg('swapMessage', e.message, 'err');
+    if(state.activeTab === 'proposalList') setMsg('proposalListMessage', e.message, 'err');
   }finally{
     stopButtonLoading(btn);
   }
@@ -2529,6 +2610,7 @@ window.submitLeaveReplacements = async function(btn){
     const res = await api('respondSwapRequest', { token: state.token, payload: { requestId: pending.requestId, decision: 'DONG_Y', replacements } });
     closeLeaveReplacementModal();
     setMsg('swapMessage', res.message, 'ok');
+    if(state.activeTab === 'proposalList') setMsg('proposalListMessage', res.message, 'ok');
     await loadMyRequests();
     await loadPublicWeek();
     if(state.activeTab === 'proposalList') await loadProposalList();
