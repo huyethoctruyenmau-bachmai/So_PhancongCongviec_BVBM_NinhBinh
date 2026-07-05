@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 33.4</title>
+  <title>Lịch phân công công việc PXN - Version 36.4</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -1565,6 +1565,160 @@
       }
     }
 
+
+    /* ===== PATCH V34.4: MOBILE DS ĐỀ XUẤT - XẾP 2 Ô THEO DÒNG ===== */
+    @media (max-width:760px){
+      #proposalListPanel .proposal-filter-grid{
+        display:grid!important;
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        gap:8px!important;
+        width:100%!important;
+        max-width:100%!important;
+        align-items:end!important;
+      }
+      #proposalListPanel .proposal-filter-field,
+      #proposalListPanel .proposal-view-btn{
+        min-width:0!important;
+        width:100%!important;
+        max-width:100%!important;
+        box-sizing:border-box!important;
+      }
+      #proposalListPanel .proposal-filter-field:nth-child(1),
+      #proposalListPanel .proposal-filter-field:nth-child(2),
+      #proposalListPanel .proposal-filter-field:nth-child(6),
+      #proposalListPanel .proposal-view-btn{
+        grid-column:auto!important;
+      }
+      #proposalListPanel .proposal-filter-field:nth-child(3),
+      #proposalListPanel .proposal-filter-field:nth-child(4),
+      #proposalListPanel .proposal-filter-field:nth-child(5){
+        grid-column:1 / -1!important;
+      }
+      #proposalListPanel .proposal-view-btn{
+        margin-top:0!important;
+        align-self:end!important;
+        padding-left:6px!important;
+        padding-right:6px!important;
+        white-space:nowrap!important;
+      }
+    }
+
+
+    /* ===== PATCH V35.4: HEADER - THÔNG TIN PHÒNG TO HƠN VÀ CÁCH KHOA RÕ HƠN ===== */
+    .brand-sub{
+      font-size:13.3px!important;
+      line-height:1.28!important;
+      margin-top:3px!important;
+      opacity:.96!important;
+    }
+    @media (max-width:760px){
+      .brand-sub{
+        font-size:11.6px!important;
+        line-height:1.25!important;
+        margin-top:2px!important;
+      }
+    }
+
+
+    /* ===== PATCH V36.4: ĐK NGHỈ PHÉP 2 DÒNG + BẢNG TẠO LỊCH KHÔNG CO RÚM ===== */
+    #swapPanel .leave-date-row{
+      display:grid!important;
+      grid-template-columns:1fr!important;
+      gap:8px!important;
+      grid-column:1 / -1!important;
+      width:100%!important;
+      max-width:100%!important;
+      min-width:0!important;
+    }
+    #swapPanel .leave-date-pair{
+      display:grid!important;
+      grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr)!important;
+      gap:8px!important;
+      width:100%!important;
+      max-width:100%!important;
+      min-width:0!important;
+      align-items:end!important;
+    }
+    #swapPanel .leave-inline-field,
+    #swapPanel .leave-inline-field input,
+    #swapPanel .leave-inline-field select{
+      width:100%!important;
+      max-width:100%!important;
+      min-width:0!important;
+      box-sizing:border-box!important;
+    }
+
+    #adminPanel .editor-wrap{
+      width:100%!important;
+      max-width:100%!important;
+      overflow-x:auto!important;
+      overflow-y:visible!important;
+      -webkit-overflow-scrolling:touch!important;
+      border-radius:10px!important;
+    }
+    #adminPanel .edit-table{
+      width:max-content!important;
+      min-width:1280px!important;
+      max-width:none!important;
+      table-layout:fixed!important;
+    }
+    #adminPanel .edit-table th,
+    #adminPanel .edit-table td{
+      overflow:visible!important;
+      word-break:normal!important;
+      overflow-wrap:normal!important;
+      white-space:normal!important;
+    }
+    #adminPanel .edit-table .stt{
+      width:44px!important;
+      min-width:44px!important;
+      max-width:44px!important;
+    }
+    #adminPanel .edit-table th:nth-child(2), #adminPanel .edit-table td:nth-child(2){width:105px!important;min-width:105px!important;}
+    #adminPanel .edit-table th:nth-child(3), #adminPanel .edit-table td:nth-child(3){width:112px!important;min-width:112px!important;}
+    #adminPanel .edit-table th:nth-child(4), #adminPanel .edit-table td:nth-child(4){width:132px!important;min-width:132px!important;}
+    #adminPanel .edit-table th:nth-child(5), #adminPanel .edit-table td:nth-child(5){width:124px!important;min-width:124px!important;}
+    #adminPanel .edit-table th:nth-child(6), #adminPanel .edit-table td:nth-child(6){width:118px!important;min-width:118px!important;}
+    #adminPanel .edit-table th:nth-child(7), #adminPanel .edit-table td:nth-child(7){width:100px!important;min-width:100px!important;}
+    #adminPanel .edit-table th:nth-child(8), #adminPanel .edit-table td:nth-child(8){width:138px!important;min-width:138px!important;}
+    #adminPanel .edit-table th:nth-child(9), #adminPanel .edit-table td:nth-child(9){width:100px!important;min-width:100px!important;}
+    #adminPanel .edit-table th:nth-child(10), #adminPanel .edit-table td:nth-child(10){width:108px!important;min-width:108px!important;}
+    #adminPanel .edit-table th:nth-child(11), #adminPanel .edit-table td:nth-child(11){width:108px!important;min-width:108px!important;}
+    #adminPanel .edit-cell-box input{
+      font-size:12px!important;
+      min-height:28px!important;
+      padding:3px 4px!important;
+    }
+    #adminPanel .edit-cell-options{
+      grid-template-columns:minmax(0,1fr) auto!important;
+    }
+    @media (max-width:760px){
+      #swapPanel .leave-date-pair{
+        grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)!important;
+        gap:6px!important;
+      }
+      #swapPanel .leave-inline-field label{
+        font-size:12px!important;
+        height:16px!important;
+        line-height:16px!important;
+        margin-bottom:3px!important;
+      }
+      #swapPanel .leave-inline-field input,
+      #swapPanel .leave-inline-field select{
+        height:36px!important;
+        min-height:36px!important;
+        font-size:13px!important;
+        padding:4px 5px!important;
+      }
+      #adminPanel .edit-table{
+        min-width:1180px!important;
+      }
+      #adminPanel .edit-cell-box input{
+        font-size:11px!important;
+        min-height:26px!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -1659,27 +1813,31 @@
               <select id="targetAssignmentSelect"></select>
             </div>
             <div class="leave-date-row leave-only hidden">
-              <div class="leave-inline-field">
-                <label>Nghỉ từ</label>
-                <select id="leaveStartPart">
-                  <option value="AM">Sáng</option>
-                  <option value="PM">Chiều</option>
-                </select>
+              <div class="leave-date-pair">
+                <div class="leave-inline-field">
+                  <label>Nghỉ từ</label>
+                  <select id="leaveStartPart">
+                    <option value="AM">Sáng</option>
+                    <option value="PM">Chiều</option>
+                  </select>
+                </div>
+                <div class="leave-inline-field">
+                  <label>Ngày</label>
+                  <input id="leaveFromDate" type="date">
+                </div>
               </div>
-              <div class="leave-inline-field">
-                <label>Ngày</label>
-                <input id="leaveFromDate" type="date">
-              </div>
-              <div class="leave-inline-field">
-                <label>Nghỉ đến hết</label>
-                <select id="leaveEndPart">
-                  <option value="AM">Sáng</option>
-                  <option value="PM" selected>Chiều</option>
-                </select>
-              </div>
-              <div class="leave-inline-field">
-                <label>Ngày</label>
-                <input id="leaveToDate" type="date">
+              <div class="leave-date-pair">
+                <div class="leave-inline-field">
+                  <label>Nghỉ đến hết</label>
+                  <select id="leaveEndPart">
+                    <option value="AM">Sáng</option>
+                    <option value="PM" selected>Chiều</option>
+                  </select>
+                </div>
+                <div class="leave-inline-field">
+                  <label>Ngày</label>
+                  <input id="leaveToDate" type="date">
+                </div>
               </div>
             </div>
             <div class="swap-field swap-field-full">
@@ -1776,7 +1934,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 33.4</div>
+    <div id="versionFooter" class="version-footer">Version 36.4</div>
   </main>
 </div>
 
@@ -1816,7 +1974,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 33;
+const INDEX_VERSION = 36;
 const CODE_VERSION = 4;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
