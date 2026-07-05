@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 21.2</title>
+  <title>Lịch phân công công việc PXN - Version 24.3</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=16.1">
@@ -923,12 +923,13 @@
     .account-form-lite .full{grid-column:1/-1;}
     .account-form-lite input,.account-form-lite select{height:38px!important;min-height:38px!important;}
     .account-actions-lite{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;}
-    .tabbar{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
-    .tabbar.has-admin{grid-template-columns:repeat(4,minmax(0,1fr))!important;}
+    .tabbar{grid-template-columns:repeat(4,minmax(0,1fr))!important;}
+    .tabbar.has-admin{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
     .tabbar .tab-btn[data-tab="account"]{order:1!important;}
     .tabbar .tab-btn[data-tab="schedule"]{order:2!important;}
     .tabbar .tab-btn[data-tab="swap"]{order:3!important;}
     .tabbar .tab-btn[data-tab="admin"]{order:4!important;}
+    .tabbar .tab-btn[data-tab="proposalList"]{order:5!important;}
     @media (min-width:900px){
       .tabbar{display:flex!important;grid-template-columns:none!important;justify-content:flex-start!important;gap:6px!important;}
       .tabbar .tab-btn{flex:0 0 auto!important;min-width:128px!important;}
@@ -1129,13 +1130,167 @@
       }
     }
 
+
+    /* ===== PATCH V22.2: FONT LOGIN ARIAL + ĐỒNG BỘ CỠ CHỮ TAB ĐỔI LỊCH ===== */
+    #loginModal,
+    #loginModal *,
+    #loginModal button,
+    #loginModal input,
+    #loginModal select,
+    #loginModal textarea,
+    #loginModal label,
+    #loginModal .btn{
+      font-family:Arial,sans-serif!important;
+    }
+    #loginModal #btnDoLogin,
+    #btnLogin{
+      font-family:Arial,sans-serif!important;
+      font-weight:500!important;
+    }
+
+    .swap-panel,
+    .swap-panel *,
+    .swap-panel input,
+    .swap-panel select,
+    .swap-panel button{
+      font-family:Arial,sans-serif!important;
+    }
+    .swap-panel{
+      font-size:15px!important;
+      line-height:1.45!important;
+    }
+    .swap-col-title{
+      font-size:16px!important;
+      line-height:1.4!important;
+      font-weight:600!important;
+    }
+    .swap-field label{
+      font-size:14px!important;
+      height:auto!important;
+      min-height:18px!important;
+      line-height:1.35!important;
+      margin-bottom:6px!important;
+    }
+    .swap-field input,
+    .swap-field select{
+      height:40px!important;
+      min-height:40px!important;
+      font-size:15px!important;
+      line-height:20px!important;
+      padding:7px 10px!important;
+    }
+    .swap-send-row .btn{
+      height:40px!important;
+      min-height:40px!important;
+      font-size:15px!important;
+    }
+    .swap-panel .request-item{
+      font-size:14.5px!important;
+      line-height:1.45!important;
+    }
+    .swap-panel .small{
+      font-size:13px!important;
+      line-height:1.4!important;
+    }
+    .swap-panel .pill{
+      font-size:12px!important;
+      line-height:1.25!important;
+    }
+    @media (max-width:760px){
+      .swap-panel{
+        font-size:15.5px!important;
+        line-height:1.5!important;
+      }
+      .swap-col{
+        padding:12px!important;
+      }
+      .swap-col-title{
+        font-size:16px!important;
+        line-height:1.4!important;
+        margin-bottom:12px!important;
+      }
+      .swap-form-grid{
+        gap:11px!important;
+      }
+      .swap-field label{
+        font-size:14.5px!important;
+        line-height:1.35!important;
+        min-height:19px!important;
+        margin-bottom:6px!important;
+      }
+      .swap-field input,
+      .swap-field select{
+        height:42px!important;
+        min-height:42px!important;
+        font-size:15.5px!important;
+        line-height:21px!important;
+        padding:8px 10px!important;
+        border-radius:8px!important;
+      }
+      .swap-send-row .btn{
+        height:42px!important;
+        min-height:42px!important;
+        font-size:15.5px!important;
+      }
+      .swap-panel .request-item{
+        padding:10px!important;
+        font-size:15px!important;
+      }
+      .swap-panel .small{
+        font-size:13.5px!important;
+      }
+      .swap-panel .pill{
+        font-size:12px!important;
+        padding:4px 7px!important;
+      }
+    }
+
+
+    /* ===== PATCH V23.2: TAB DANH SÁCH ĐỀ XUẤT ===== */
+    .proposal-panel{max-width:none;margin:0 auto 12px;}
+    .proposal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+    .proposal-head .card-title{margin:0;}
+    .proposal-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+    .proposal-list .request-item{margin:0!important;}
+    .proposal-meta-grid{display:grid;grid-template-columns:1fr;gap:3px;margin-top:6px;}
+    .proposal-role{font-size:12.5px;color:var(--g-muted);line-height:1.4;margin-top:3px;}
+    .proposal-refresh-icon{width:34px;height:34px;min-width:34px;border:0;background:transparent;color:var(--g-blue);display:inline-grid;place-items:center;padding:0;border-radius:50%;box-shadow:none;}
+    .proposal-refresh-icon:hover{background:rgba(26,115,232,.08);color:var(--g-blue-hover);}
+    .proposal-refresh-icon .icon2d{width:22px;height:22px;stroke-width:1.9;}
+    @media (max-width:760px){
+      .proposal-panel{padding:10px!important;}
+      .proposal-list{grid-template-columns:1fr;gap:8px;}
+      .proposal-head{margin-bottom:8px;}
+      .proposal-list .request-item{font-size:14.5px!important;padding:10px!important;}
+      .proposal-list .small,.proposal-role{font-size:13px!important;}
+      .proposal-list .pill{font-size:12px!important;padding:4px 7px!important;}
+    }
+
+    /* ===== PATCH V24.3: CA/BUỔI, LÀM TRƯA, NGHỈ PHÉP, DANH SÁCH ĐỀ XUẤT ===== */
+    .shift-suffix{display:block;font-size:.88em;line-height:1.08;font-weight:400!important;color:inherit;margin-top:1px}
+    .person-name .name-initials,.person-name .name-given,.person-name .name-given.single{font-weight:400!important}
+    .edit-cell-box{display:grid;grid-template-columns:1fr;gap:3px;min-width:0}
+    .edit-cell-box input,.edit-cell-box select{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+    .edit-cell-options{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px;align-items:center}
+    .edit-shift{height:26px!important;min-height:26px!important;font-size:11.5px!important;padding:2px 4px!important;border-radius:4px!important}
+    .edit-lunch{display:inline-flex!important;align-items:center;justify-content:center;gap:2px;margin:0!important;font-size:10.5px!important;line-height:1!important;color:var(--danger)!important;font-weight:500!important;white-space:nowrap}
+    .edit-lunch input{width:14px!important;height:14px!important;min-height:14px!important;margin:0!important;padding:0!important;box-shadow:none!important}
+    .swap-leave-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .proposal-filter-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+    .leave-replace-table-wrap{overflow:auto;border:1px solid var(--g-line);border-radius:8px;background:#fff;margin-top:10px}
+    .leave-replace-table{width:100%;border-collapse:collapse;min-width:620px;font-size:14px}
+    .leave-replace-table th,.leave-replace-table td{border-bottom:1px solid var(--g-line);border-right:1px solid var(--g-line);padding:8px;vertical-align:middle;text-align:left}
+    .leave-replace-table th{background:#f8fafd;font-weight:600;color:var(--g-text)}
+    .leave-replace-table th:last-child,.leave-replace-table td:last-child{border-right:0}.leave-replace-table tr:last-child td{border-bottom:0}
+    @media(max-width:760px){.swap-leave-row{grid-template-columns:1fr 1fr}.proposal-filter-row{grid-template-columns:1fr}.edit-cell-options{grid-template-columns:1fr}.edit-lunch{justify-content:flex-start}.leave-replace-table{font-size:13px;min-width:560px}}
+
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <img class="brand-logo" src="./APP_LOGO_BVBM.png?v=21.2" alt="Logo Bệnh viện Bạch Mai">
+      <img class="brand-logo" src="./APP_LOGO_BVBM.png?v=23.2" alt="Logo Bệnh viện Bạch Mai">
       <div class="brand-text">
         <div class="brand-title">Khoa Huyết học và Truyền máu</div>
         <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
@@ -1153,6 +1308,7 @@
     <button class="tab-btn active" data-tab="schedule" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span><span>Lịch công việc</span></button>
     <button class="tab-btn" data-tab="swap" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3-3"/><path d="M18 7l-3 3"/><path d="M17 17H6l3 3"/><path d="M6 17l3-3"/></svg></span><span>Đổi lịch</span></button>
     <button id="tabAdminBtn" class="tab-btn hidden" data-tab="admin" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span>Tạo lịch</span></button>
+    <button class="tab-btn" data-tab="proposalList" type="button"><span class="ico"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span>Danh sách đề xuất</span></button>
   </nav>
 
   <main class="main">
@@ -1202,19 +1358,42 @@
               <select id="swapType">
                 <option value="DOI_NGANG">Đổi ngang</option>
                 <option value="NHAN_THAY">Nhờ làm hộ</option>
+                <option value="NGHI_PHEP">Đăng ký nghỉ phép</option>
               </select>
             </div>
-            <div class="swap-field">
+            <div class="swap-field swap-only">
               <label>Lịch của tôi cần đổi</label>
               <select id="myAssignmentSelect"></select>
             </div>
             <div class="swap-field">
-              <label>Người được đề xuất</label>
+              <label id="receiverLabel">Người được đề xuất</label>
               <input id="receiverInput" list="staffOptions" placeholder="Gõ tên hoặc mã nhân viên">
             </div>
-            <div id="targetAssignmentBox" class="swap-field">
+            <div id="targetAssignmentBox" class="swap-field swap-only">
               <label>Lịch của người được đề xuất</label>
               <select id="targetAssignmentSelect"></select>
+            </div>
+            <div class="swap-field leave-only hidden">
+              <label>Từ ngày nghỉ</label>
+              <input id="leaveFromDate" type="date">
+            </div>
+            <div class="swap-field leave-only hidden">
+              <label>Nghỉ từ</label>
+              <select id="leaveStartPart">
+                <option value="AM">Sáng</option>
+                <option value="PM">Chiều</option>
+              </select>
+            </div>
+            <div class="swap-field leave-only hidden">
+              <label>Đến ngày nghỉ</label>
+              <input id="leaveToDate" type="date">
+            </div>
+            <div class="swap-field leave-only hidden">
+              <label>Nghỉ đến hết</label>
+              <select id="leaveEndPart">
+                <option value="AM">Sáng</option>
+                <option value="PM" selected>Chiều</option>
+              </select>
             </div>
             <div class="swap-field swap-field-full">
               <label>Lý do</label>
@@ -1241,7 +1420,7 @@
         <button id="btnPublishWeek" class="btn ok" type="button">Công bố lịch</button>
       </div>
       <div class="small" style="margin-top:8px">
-        Người làm trưa sẽ tự tô chữ đỏ: STT 1 của Chạy máy, Thủ công ĐM-TB, Ký duyệt KQ, Truyền máu. Công việc khác không làm trưa.
+Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu chọn sáng/chiều, bảng chỉ ghi thêm (sáng) hoặc (chiều); cả ngày không ghi thêm.
       </div>
       <div id="editorTabs" class="tabs"></div>
       <div id="editorBox"></div>
@@ -1253,7 +1432,35 @@
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 21.2</div>
+    <section id="proposalListPanel" class="proposal-panel card hidden" data-tab-content="proposalList">
+      <div class="proposal-head">
+        <h2 class="card-title">Danh sách đề xuất</h2>
+        <button id="btnRefreshProposalList" class="proposal-refresh-icon" type="button" aria-label="Tải mới danh sách đề xuất" title="Tải mới danh sách đề xuất">
+          <svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.6 6.1"/><path d="M3 12A9 9 0 0 1 18.6 5.9"/><path d="M18 2v5h5"/><path d="M6 22v-5H1"/></svg>
+        </button>
+      </div>
+      <div id="proposalListMessage"></div>
+      <div class="proposal-filter-row">
+        <select id="proposalFilterRole" aria-label="Lọc vai trò">
+          <option value="ALL">Tất cả</option>
+          <option value="CREATED">Do tôi tạo</option>
+          <option value="RECEIVED">Gửi đến tôi</option>
+        </select>
+        <select id="proposalFilterStatus" aria-label="Lọc trạng thái">
+          <option value="ALL">Tất cả trạng thái</option>
+          <option value="PENDING">Chờ xử lý</option>
+          <option value="DONE">Đã xử lý</option>
+        </select>
+        <select id="proposalFilterType" aria-label="Lọc loại đề xuất">
+          <option value="ALL">Tất cả loại</option>
+          <option value="DOI_LICH">Đổi lịch</option>
+          <option value="NGHI_PHEP">Nghỉ phép</option>
+        </select>
+      </div>
+      <div id="proposalListBox" class="proposal-list"></div>
+    </section>
+
+    <div id="versionFooter" class="version-footer">Version 24.3</div>
   </main>
 </div>
 
@@ -1286,8 +1493,8 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 21;
-const CODE_VERSION = 2;
+const INDEX_VERSION = 24;
+const CODE_VERSION = 3;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
 const POSITIONS = [
@@ -1317,7 +1524,9 @@ const state = {
   activeTab: 'schedule',
   accountInfo: null,
   accountOptions: null,
-  accountView: 'info'
+  accountView: 'info',
+  proposalListItems: [],
+  pendingLeaveApproval: null
 };
 
 const $ = id => document.getElementById(id);
@@ -1357,11 +1566,13 @@ function bindEvents(){
   $('btnSaveDraft').onclick = withButtonLoading(saveDraft);
   $('btnPublishWeek').onclick = withButtonLoading(publishWeek);
 
-  $('swapType').onchange = refreshSwapTargetVisibility;
+  $('swapType').onchange = refreshSwapFormMode;
   $('receiverInput').oninput = populateTargetAssignments;
   $('btnCreateSwap').onclick = withButtonLoading(createSwapRequest);
   if($('btnRefreshRequests')) $('btnRefreshRequests').onclick = withButtonLoading(loadMyRequests);
   if($('btnRefreshSwapData')) $('btnRefreshSwapData').onclick = withButtonLoading(refreshSwapData);
+  if($('btnRefreshProposalList')) $('btnRefreshProposalList').onclick = withButtonLoading(loadProposalList);
+  ['proposalFilterRole','proposalFilterStatus','proposalFilterType'].forEach(id => { if($(id)) $(id).onchange = () => renderProposalList(state.proposalListItems || []); });
 
   document.addEventListener('click', e => {
     const btn = e.target && e.target.closest ? e.target.closest('button') : null;
@@ -1568,7 +1779,7 @@ function renderPaper(){
     ${daysHtml}
     <div class="paper-note">
       <strong>Ghi chú:</strong>
-      Người làm trưa sẽ tự tô chữ đỏ: STT 1 của Chạy máy, Thủ công ĐM-TB, Ký duyệt KQ, Truyền máu. Công việc khác không làm trưa.
+Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu chọn sáng/chiều, bảng chỉ ghi thêm (sáng) hoặc (chiều); cả ngày không ghi thêm.
       Trực: T2–T6 là trực đêm; T7, Chủ nhật là trực cả ngày. Mỗi tua trực gồm 3 người.
     </div>`;
 }
@@ -1584,9 +1795,7 @@ function renderDayBlock(day, q){
   for(let stt = 1; stt <= maxRows; stt++){
     const cells = POSITIONS.map(pos => {
       const item = findAssignment(day, pos.key, stt);
-      const name = item ? item.hoTen : '';
-      const lunch = item && (item.lamTrua || isLunch(pos.key, stt));
-      return `<td>${renderName(name, lunch, q)}</td>`;
+      return `<td>${renderName(item, q)}</td>`;
     }).join('');
     rows.push(`<tr><td class="stt">${stt}</td>${cells}</tr>`);
   }
@@ -1609,17 +1818,22 @@ function renderHeader(pos, day){
   return `<th class="${pos.cls}">${esc(pos.label)}</th>`;
 }
 
-function renderName(name, lunch, q){
-  if(!name) return '&nbsp;';
+function renderName(item, q){
+  if(!item || !item.hoTen) return '&nbsp;';
+  const name = item.hoTen;
   const display = compactDisplayNameParts(name);
   const compactText = display.initials ? (display.initials + ' ' + display.givenName) : display.givenName;
+  const suffix = shiftSuffix(item.shift);
   let safe = display.initials
     ? `<span class="name-initials">${esc(display.initials)}</span><span class="name-given">${esc(display.givenName)}</span>`
     : `<span class="name-given single">${esc(display.givenName)}</span>`;
+  if(suffix) safe += `<span class="shift-suffix">${esc(suffix)}</span>`;
   if(q && (normalizeText(name).includes(normalizeText(q)) || normalizeText(compactText).includes(normalizeText(q)))){
     safe = '<span class="search-hit">' + safe + '</span>';
   }
-  return `<span class="person-name ${lunch ? 'lunch' : ''}" title="${escAttr(name)}">${safe}</span>`;
+  const lunch = !!item.lamTrua;
+  const title = suffix ? `${name} ${suffix}` : name;
+  return `<span class="person-name ${lunch ? 'lunch' : ''}" title="${escAttr(title)}">${safe}</span>`;
 }
 
 function compactDisplayNameParts(name){
@@ -1702,9 +1916,23 @@ function renderEditor(){
     rows.push(`<tr>
       <td class="stt">${stt}</td>
       ${POSITIONS.map((pos,pi) => {
-        const item = findAssignment(day, pos.key, stt);
-        const val = item ? item.hoTen : '';
-        return `<td><input list="staffOptions" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" value="${escAttr(val)}" oninput="updateEditCell(this)"></td>`;
+        const item = findAssignment(day, pos.key, stt) || {};
+        const val = item.hoTen || '';
+        const shift = normalizeShift(item.shift || 'FULL');
+        const lunch = item.lamTrua !== undefined ? !!item.lamTrua : (pos.lunch && stt === 1);
+        return `<td>
+          <div class="edit-cell-box">
+            <input list="staffOptions" data-kind="name" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" value="${escAttr(val)}" oninput="updateEditCell(this)">
+            <div class="edit-cell-options">
+              <select class="edit-shift" data-kind="shift" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" onchange="updateEditCell(this)">
+                <option value="FULL" ${shift === 'FULL' ? 'selected' : ''}>Cả ngày</option>
+                <option value="AM" ${shift === 'AM' ? 'selected' : ''}>Sáng</option>
+                <option value="PM" ${shift === 'PM' ? 'selected' : ''}>Chiều</option>
+              </select>
+              ${pos.lunch ? `<label class="edit-lunch"><input type="checkbox" data-kind="lunch" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" ${lunch ? 'checked' : ''} onchange="updateEditCell(this)">Trưa</label>` : `<span></span>`}
+            </div>
+          </div>
+        </td>`;
       }).join('')}
     </tr>`);
   }
@@ -1724,21 +1952,36 @@ window.selectEditDay = function(i){
   renderEditor();
 };
 
-window.updateEditCell = function(input){
+function updateEditCell(input){
   const dayIndex = Number(input.dataset.day);
   const posIndex = Number(input.dataset.pos);
   const stt = Number(input.dataset.stt);
-  const name = input.value.trim();
   const day = state.editData.days[dayIndex];
   const pos = POSITIONS[posIndex];
   if(!day.assignments) day.assignments = {};
   if(!day.assignments[pos.key]) day.assignments[pos.key] = [];
+  const cellSelector = `[data-day="${dayIndex}"][data-pos="${posIndex}"][data-stt="${stt}"]`;
+  const nameInput = document.querySelector(`${cellSelector}[data-kind="name"]`);
+  const shiftInput = document.querySelector(`${cellSelector}[data-kind="shift"]`);
+  const lunchInput = document.querySelector(`${cellSelector}[data-kind="lunch"]`);
+  const name = nameInput ? nameInput.value.trim() : '';
+  const oldItem = day.assignments[pos.key].find(x => Number(x.stt) === stt) || {};
   day.assignments[pos.key] = day.assignments[pos.key].filter(x => Number(x.stt) !== stt);
   if(name){
-    day.assignments[pos.key].push({ stt, hoTen:name, lamTrua:isLunch(pos.key, stt) });
+    const shift = normalizeShift(shiftInput ? shiftInput.value : oldItem.shift);
+    const defaultLunch = pos.lunch && stt === 1;
+    const lamTrua = lunchInput ? !!lunchInput.checked : !!oldItem.lamTrua || defaultLunch;
+    day.assignments[pos.key].push({
+      assignmentId: oldItem.assignmentId || '',
+      stt,
+      hoTen:name,
+      maNhanVien: oldItem.maNhanVien || '',
+      shift,
+      lamTrua
+    });
     day.assignments[pos.key].sort((a,b) => Number(a.stt)-Number(b.stt));
   }
-};
+}
 
 async function saveDraft(){
   ensureLogged();
@@ -1786,7 +2029,7 @@ function prepareSwapPanel(){
   if(!state.user || !state.weekData) return;
   populateMyAssignments();
   populateTargetAssignments();
-  refreshSwapTargetVisibility();
+  refreshSwapFormMode();
 }
 
 function populateMyAssignments(){
@@ -1807,8 +2050,20 @@ function populateTargetAssignments(){
 }
 
 function refreshSwapTargetVisibility(){
-  const isSwap = $('swapType').value === 'DOI_NGANG';
-  $('targetAssignmentBox').classList.toggle('hidden', !isSwap);
+  refreshSwapFormMode();
+}
+
+function refreshSwapFormMode(){
+  const type = $('swapType').value;
+  const isLeave = type === 'NGHI_PHEP';
+  const isSwap = type === 'DOI_NGANG';
+  document.querySelectorAll('.leave-only').forEach(el => el.classList.toggle('hidden', !isLeave));
+  document.querySelectorAll('.swap-only').forEach(el => el.classList.toggle('hidden', isLeave));
+  if($('targetAssignmentBox')) $('targetAssignmentBox').classList.toggle('hidden', isLeave || !isSwap);
+  if($('receiverLabel')) $('receiverLabel').textContent = isLeave ? 'Người phê duyệt' : 'Người được đề xuất';
+  if($('receiverInput')) $('receiverInput').placeholder = isLeave ? 'Gõ tên hoặc mã người phê duyệt' : 'Gõ tên hoặc mã nhân viên';
+  if($('leaveFromDate') && !$('leaveFromDate').value) $('leaveFromDate').value = state.weekStart;
+  if($('leaveToDate') && !$('leaveToDate').value) $('leaveToDate').value = state.weekStart;
 }
 
 async function refreshSwapData(){
@@ -1829,16 +2084,27 @@ async function createSwapRequest(){
   ensureLogged();
   clearMsg('swapMessage');
   try{
-    const payload = {
-      kieuDoi: $('swapType').value,
+    const type = $('swapType').value;
+    const payload = type === 'NGHI_PHEP' ? {
+      kieuDoi: 'NGHI_PHEP',
+      fromDate: $('leaveFromDate').value,
+      startPart: $('leaveStartPart').value,
+      toDate: $('leaveToDate').value,
+      endPart: $('leaveEndPart').value,
+      nguoiNhanTen: $('receiverInput').value.trim(),
+      lyDo: $('swapReason').value.trim()
+    } : {
+      kieuDoi: type,
       assignmentFromId: $('myAssignmentSelect').value,
-      assignmentTargetId: $('swapType').value === 'DOI_NGANG' ? $('targetAssignmentSelect').value : '',
+      assignmentTargetId: type === 'DOI_NGANG' ? $('targetAssignmentSelect').value : '',
       nguoiNhanTen: $('receiverInput').value.trim(),
       lyDo: $('swapReason').value.trim()
     };
     const res = await api('createSwapRequest', { token: state.token, payload });
     setMsg('swapMessage', res.message, 'ok');
+    $('swapReason').value = '';
     await loadMyRequests();
+    if(state.activeTab === 'proposalList') await loadProposalList();
   }catch(e){
     setMsg('swapMessage', e.message, 'err');
   }
@@ -1855,32 +2121,75 @@ async function loadMyRequests(){
 }
 
 function renderRequests(items){
-  items = (items || []).filter(item => item.isReceiver);
+  items = (items || []).filter(item => item.isReceiver && (item.trangThai === 'CHO_XAC_NHAN' || item.trangThai === 'CHO_PHE_DUYET'));
   if(!items.length){
-    $('requestList').innerHTML = '<div class="small">Chưa có đề xuất nào người khác yêu cầu anh/chị đổi.</div>';
+    $('requestList').innerHTML = '<div class="small">Chưa có đề xuất nào cần anh/chị xử lý.</div>';
     return;
   }
   $('requestList').innerHTML = items.map(item => {
-    const canRespond = item.isReceiver && item.trangThai === 'CHO_XAC_NHAN';
-    const canCancel = item.isRequester && item.trangThai === 'CHO_XAC_NHAN';
+    const canRespond = item.isReceiver && (item.trangThai === 'CHO_XAC_NHAN' || item.trangThai === 'CHO_PHE_DUYET');
     return `<div class="request-item">
       <div class="request-head">
         <div>
-          <strong>${esc(item.nguoiDeXuatTen)}</strong> đề xuất với <strong>${esc(item.nguoiNhanTen)}</strong>
-          <div class="small">${esc(item.kieuDoi === 'DOI_NGANG' ? 'Đổi ngang' : 'Nhờ làm hộ')} · ${esc(item.createdAt || '')}</div>
+          <strong>${esc(item.nguoiDeXuatTen)}</strong> gửi đến <strong>${esc(item.nguoiNhanTen)}</strong>
+          <div class="small">${esc(requestTypeText(item))} · ${esc(formatDateTimeVi(item.createdAt) || item.createdAt || '')}</div>
         </div>
         <span class="pill ${pillClass(item.trangThai)}">${esc(requestStatusText(item.trangThai))}</span>
       </div>
       <div class="small" style="margin-top:6px">
-        <div><strong>Lịch cần đổi:</strong> ${esc(assignmentText(item.fromAssignment))}</div>
-        ${item.targetAssignment ? `<div><strong>Lịch đổi ngang:</strong> ${esc(assignmentText(item.targetAssignment))}</div>` : ''}
-        ${item.lyDo ? `<div><strong>Lý do:</strong> ${esc(item.lyDo)}</div>` : ''}
+        ${renderRequestDetailHtml(item)}
       </div>
       <div class="btn-row">
         ${canRespond ? `<button class="btn ok" type="button" onclick="respondRequest('${escAttr(item.requestId)}','DONG_Y', this)">Đồng ý</button>
         <button class="btn danger" type="button" onclick="respondRequest('${escAttr(item.requestId)}','TU_CHOI', this)">Từ chối</button>` : ''}
-        ${canCancel ? `<button class="btn secondary" type="button" onclick="cancelRequest('${escAttr(item.requestId)}', this)">Hủy đề xuất</button>` : ''}
       </div>
+    </div>`;
+  }).join('');
+}
+
+
+async function loadProposalList(){
+  ensureLogged();
+  clearMsg('proposalListMessage');
+  const box = $('proposalListBox');
+  if(box) box.innerHTML = '<div class="loading">Đang tải danh sách đề xuất...</div>';
+  try{
+    const res = await api('getMySwapRequests', { token: state.token });
+    renderProposalList(res.data.items || []);
+  }catch(e){
+    if(box) box.innerHTML = '<div class="empty">Không tải được danh sách đề xuất.</div>';
+    setMsg('proposalListMessage', e.message, 'err');
+  }
+}
+
+function renderProposalList(items){
+  const box = $('proposalListBox');
+  if(!box) return;
+  state.proposalListItems = items || [];
+  items = applyProposalFilters(state.proposalListItems);
+  if(!items.length){
+    box.innerHTML = '<div class="empty">Không có đề xuất phù hợp bộ lọc.</div>';
+    return;
+  }
+  box.innerHTML = items.map(item => {
+    const roleText = item.isRequester ? 'Tôi tạo đề xuất' : 'Gửi đến tôi';
+    const timeText = item.respondedAt ? `Tạo: ${formatDateTimeVi(item.createdAt) || item.createdAt || ''} · Xử lý: ${formatDateTimeVi(item.respondedAt) || item.respondedAt || ''}` : `Tạo: ${formatDateTimeVi(item.createdAt) || item.createdAt || ''}`;
+    const canCancel = item.isRequester && (item.trangThai === 'CHO_XAC_NHAN' || item.trangThai === 'CHO_PHE_DUYET');
+    return `<div class="request-item proposal-history-item">
+      <div class="request-head">
+        <div>
+          <strong>${esc(requestTypeText(item))}</strong>
+          <div class="proposal-role">${esc(roleText)}</div>
+          <div class="small">${esc(timeText)}</div>
+        </div>
+        <span class="pill ${pillClass(item.trangThai)}">${esc(requestStatusText(item.trangThai))}</span>
+      </div>
+      <div class="proposal-meta-grid small">
+        <div><strong>Người đề xuất:</strong> ${esc(item.nguoiDeXuatTen || '')}</div>
+        <div><strong>Người nhận/phê duyệt:</strong> ${esc(item.nguoiNhanTen || '')}</div>
+        ${renderRequestDetailHtml(item)}
+      </div>
+      ${canCancel ? `<div class="btn-row"><button class="btn secondary" type="button" onclick="cancelRequest('${escAttr(item.requestId)}', this)">Hủy đề xuất</button></div>` : ''}
     </div>`;
   }).join('');
 }
@@ -1890,9 +2199,15 @@ window.respondRequest = async function(requestId, decision, btn){
   startButtonLoading(btn);
   try{
     const res = await api('respondSwapRequest', { token: state.token, payload: { requestId, decision } });
+    if(res.data && res.data.needsReplacement){
+      openLeaveReplacementModal(requestId, res.data.conflicts || []);
+      setMsg('swapMessage', res.message, 'warn');
+      return;
+    }
     setMsg('swapMessage', res.message, 'ok');
     await loadMyRequests();
     await loadPublicWeek();
+    if(state.activeTab === 'proposalList') await loadProposalList();
   }catch(e){
     setMsg('swapMessage', e.message, 'err');
   }finally{
@@ -1907,6 +2222,7 @@ window.cancelRequest = async function(requestId, btn){
     const res = await api('cancelSwapRequest', { token: state.token, payload: { requestId } });
     setMsg('swapMessage', res.message, 'ok');
     await loadMyRequests();
+    if(state.activeTab === 'proposalList') await loadProposalList();
   }catch(e){
     setMsg('swapMessage', e.message, 'err');
   }finally{
@@ -1919,16 +2235,19 @@ function flattenAssignments(data){
   (data.days || []).forEach(day => {
     POSITIONS.forEach(pos => {
       (((day.assignments || {})[pos.key]) || []).forEach(a => {
+        const suffix = shiftSuffix(a.shift);
         out.push({
           assignmentId: a.assignmentId,
           maNhanVien: a.maNhanVien,
           hoTen: a.hoTen,
+          shift: normalizeShift(a.shift),
+          lamTrua: !!a.lamTrua,
           date: day.date,
           dateText: day.dateText,
           thu: day.thu,
           viTri: pos.key,
           stt: a.stt,
-          label: `${day.thu} ${day.dateText} - ${pos.key} - STT ${a.stt} - ${a.hoTen}`
+          label: `${day.thu} ${day.dateText} - ${pos.key} - STT ${a.stt} - ${a.hoTen}${suffix ? ' ' + suffix : ''}`
         });
       });
     });
@@ -1947,7 +2266,8 @@ function matchPerson(a, value){
 
 function assignmentText(a){
   if(!a) return 'Không tìm thấy lịch';
-  return `${a.thu || ''} ${a.ngayText || ''} - ${a.viTri || ''} - STT ${a.stt || ''} - ${a.hoTen || ''}`;
+  const suffix = shiftSuffix(a.shift);
+  return `${a.thu || ''} ${a.ngayText || ''} - ${a.viTri || ''} - STT ${a.stt || ''} - ${a.hoTen || ''}${suffix ? ' ' + suffix : ''}`;
 }
 
 function renderStaffDatalist(){
@@ -1955,6 +2275,111 @@ function renderStaffDatalist(){
     `<option value="${escAttr(p.tenNhanVien)}">${esc(p.maNhanVien)} - ${esc(p.khoaPhong || '')}</option>`
   ).join('');
 }
+
+
+
+function dateVi(value){
+  const s = String(value || '').slice(0,10);
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : s;
+}
+function formatDateTimeVi(value){
+  return formatDateTimeHaNoi(value);
+}
+
+function normalizeShift(value){
+  const v = String(value || 'FULL').trim().toUpperCase();
+  if(['AM','SÁNG','SANG','BUỔI SÁNG','BUOI SANG'].includes(v)) return 'AM';
+  if(['PM','CHIỀU','CHIEU','BUỔI CHIỀU','BUOI CHIEU'].includes(v)) return 'PM';
+  return 'FULL';
+}
+function shiftSuffix(value){
+  const v = normalizeShift(value);
+  if(v === 'AM') return '(sáng)';
+  if(v === 'PM') return '(chiều)';
+  return '';
+}
+function requestTypeText(item){
+  const t = item && (item.type || item.kieuDoi);
+  if(t === 'NGHI_PHEP') return 'Đăng ký nghỉ phép';
+  if(t === 'DOI_NGANG') return 'Đổi ngang';
+  return 'Nhờ làm hộ';
+}
+function leaveText(leave){
+  if(!leave) return '';
+  const from = leave.fromDate ? dateVi(leave.fromDate) : '';
+  const to = leave.toDate ? dateVi(leave.toDate) : from;
+  const start = normalizeShift(leave.startPart) === 'PM' ? 'chiều' : 'sáng';
+  const end = normalizeShift(leave.endPart) === 'AM' ? 'sáng' : 'chiều';
+  return `Từ ${from} (${start}) đến ${to} (${end})`;
+}
+function renderRequestDetailHtml(item){
+  if((item.type || item.kieuDoi) === 'NGHI_PHEP'){
+    return `${item.leave ? `<div><strong>Thời gian nghỉ:</strong> ${esc(leaveText(item.leave))}</div>` : ''}
+      ${item.lyDo ? `<div><strong>Lý do:</strong> ${esc(item.lyDo)}</div>` : ''}`;
+  }
+  return `<div><strong>Lịch cần đổi:</strong> ${esc(assignmentText(item.fromAssignment))}</div>
+    ${item.targetAssignment ? `<div><strong>Lịch đổi ngang:</strong> ${esc(assignmentText(item.targetAssignment))}</div>` : ''}
+    ${item.lyDo ? `<div><strong>Lý do:</strong> ${esc(item.lyDo)}</div>` : ''}`;
+}
+function applyProposalFilters(items){
+  const role = $('proposalFilterRole') ? $('proposalFilterRole').value : 'ALL';
+  const status = $('proposalFilterStatus') ? $('proposalFilterStatus').value : 'ALL';
+  const type = $('proposalFilterType') ? $('proposalFilterType').value : 'ALL';
+  return (items || []).filter(item => {
+    if(role === 'CREATED' && !item.isRequester) return false;
+    if(role === 'RECEIVED' && !item.isReceiver) return false;
+    const pending = item.trangThai === 'CHO_XAC_NHAN' || item.trangThai === 'CHO_PHE_DUYET';
+    if(status === 'PENDING' && !pending) return false;
+    if(status === 'DONE' && pending) return false;
+    const isLeave = (item.type || item.kieuDoi) === 'NGHI_PHEP';
+    if(type === 'NGHI_PHEP' && !isLeave) return false;
+    if(type === 'DOI_LICH' && isLeave) return false;
+    return true;
+  });
+}
+function openLeaveReplacementModal(requestId, conflicts){
+  state.pendingLeaveApproval = { requestId, conflicts: conflicts || [] };
+  const options = (state.personnel || []).map(p => `<option value="${escAttr(p.maNhanVien)}">${esc(p.tenNhanVien)} - ${esc(p.maNhanVien)}</option>`).join('');
+  const rows = (conflicts || []).map(c => `<tr>
+    <td>${esc(c.thu || '')}<br>${esc(c.ngayText || '')}</td>
+    <td>${esc(c.viTri || '')}<br>STT ${esc(c.stt || '')}${shiftSuffix(c.shift) ? '<br>'+esc(shiftSuffix(c.shift)) : ''}</td>
+    <td>${esc(c.hoTen || '')}</td>
+    <td><select class="leave-replacement-select" data-assignment-id="${escAttr(c.assignmentId)}"><option value="">Chọn người thay thế</option>${options}</select></td>
+  </tr>`).join('');
+  const html = `<div id="leaveReplaceModal" class="modal">
+    <div class="modal-card" style="max-width:860px">
+      <div class="modal-head"><div class="modal-title">Phân công người thay thế trước khi duyệt nghỉ phép</div><button class="close" type="button" onclick="closeLeaveReplacementModal()">×</button></div>
+      <div class="small">Nhân viên xin nghỉ đang có phân công. Vui lòng chọn người thay thế cho từng vị trí rồi bấm duyệt.</div>
+      <div class="leave-replace-table-wrap"><table class="leave-replace-table"><thead><tr><th>Ngày</th><th>Vị trí</th><th>Người nghỉ</th><th>Người thay thế</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="btn-row" style="justify-content:flex-end"><button class="btn secondary" type="button" onclick="closeLeaveReplacementModal()">Để sau</button><button class="btn ok" type="button" onclick="submitLeaveReplacements(this)">Đồng ý nghỉ phép và cập nhật lịch</button></div>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+window.closeLeaveReplacementModal = function(){
+  const modal = $('leaveReplaceModal');
+  if(modal) modal.remove();
+};
+window.submitLeaveReplacements = async function(btn){
+  const pending = state.pendingLeaveApproval;
+  if(!pending) return;
+  const replacements = Array.from(document.querySelectorAll('.leave-replacement-select')).map(sel => ({ assignmentId: sel.dataset.assignmentId, replacementMa: sel.value }));
+  if(replacements.some(r => !r.replacementMa)){ alert('Vui lòng chọn đủ người thay thế.'); return; }
+  startButtonLoading(btn);
+  try{
+    const res = await api('respondSwapRequest', { token: state.token, payload: { requestId: pending.requestId, decision: 'DONG_Y', replacements } });
+    closeLeaveReplacementModal();
+    setMsg('swapMessage', res.message, 'ok');
+    await loadMyRequests();
+    await loadPublicWeek();
+    if(state.activeTab === 'proposalList') await loadProposalList();
+  }catch(e){
+    alert(e.message || String(e));
+  }finally{
+    stopButtonLoading(btn);
+  }
+};
 
 function changeWeek(days){
   state.weekStart = addDays(state.weekStart, days);
@@ -1988,7 +2413,7 @@ function updateTabChrome(tab){
   const toolbar = $('mainToolbar');
   const status = $('statusLine');
   const toolbarRight = document.querySelector('.toolbar-right');
-  if(toolbar) toolbar.classList.toggle('main-toolbar-hidden', tab === 'swap' || tab === 'account');
+  if(toolbar) toolbar.classList.toggle('main-toolbar-hidden', tab === 'swap' || tab === 'account' || tab === 'proposalList');
   if(status) status.classList.toggle('hidden-by-tab', tab !== 'schedule');
   if(toolbarRight) toolbarRight.classList.toggle('admin-hidden', tab === 'admin');
 }
@@ -2002,6 +2427,11 @@ function showTab(tab){
   if(tab === 'swap' && !state.user){
     openLogin();
     setMsg('loginMessage', 'Vui lòng đăng nhập để tạo hoặc xác nhận đề xuất đổi lịch.', 'warn');
+    return;
+  }
+  if(tab === 'proposalList' && !state.user){
+    openLogin();
+    setMsg('loginMessage', 'Vui lòng đăng nhập để xem danh sách đề xuất.', 'warn');
     return;
   }
   if(tab === 'admin' && !(state.user && state.user.canManageSchedule)){
@@ -2025,6 +2455,9 @@ function showTab(tab){
     if(!state.weekData) loadPublicWeek().then(() => prepareSwapPanel()).catch(() => {});
     prepareSwapPanel();
     loadMyRequests();
+  }
+  if(tab === 'proposalList'){
+    loadProposalList();
   }
   if(tab === 'admin' && !state.editData){
     loadAdminWeek();
@@ -2215,15 +2648,18 @@ function statusText(s){
 function requestStatusText(s){
   return {
     CHO_XAC_NHAN:'Chờ xác nhận',
+    CHO_PHE_DUYET:'Chờ phê duyệt',
     DA_DONG_Y_CAP_NHAT:'Đã đồng ý/cập nhật',
+    DA_DUYET_NGHI_PHEP:'Đã duyệt nghỉ phép',
     TU_CHOI:'Đã từ chối',
-    DA_HUY:'Đã hủy'
+    DA_HUY:'Đã hủy',
+    HET_HIEU_LUC:'Hết hiệu lực'
   }[s] || s || '';
 }
 
 function pillClass(s){
-  if(s === 'DA_DONG_Y_CAP_NHAT') return 'done';
-  if(s === 'TU_CHOI' || s === 'DA_HUY') return 'no';
+  if(s === 'DA_DONG_Y_CAP_NHAT' || s === 'DA_DUYET_NGHI_PHEP') return 'done';
+  if(s === 'TU_CHOI' || s === 'DA_HUY' || s === 'HET_HIEU_LUC') return 'no';
   return 'wait';
 }
 
