@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 17.2</title>
+  <title>Lịch phân công công việc PXN - Version 18.2</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=16.1">
@@ -947,6 +947,88 @@
       .paper-note{font-size:12.2px!important;line-height:1.5!important;}
     }
 
+
+    /* ===== PATCH V18.2: MOBILE FONT + ACTIVE FILL + HEADER CLEAN + ACCOUNT FULL WIDTH ===== */
+    .version-footer{
+      width:100%;text-align:center;color:var(--muted);font-size:12px;line-height:1.4;
+      padding:12px 0 4px;margin:0 auto;
+    }
+    .tab-btn.active,
+    .tab-day.active,
+    .account-menu-lite .btn.active{
+      background:#d2e3fc!important;
+      color:#174ea6!important;
+      border-color:#aecbfa!important;
+      box-shadow:inset 0 0 0 1px rgba(26,115,232,.18)!important;
+      font-weight:700!important;
+    }
+    .btn.secondary:active,
+    .btn.ghost:active,
+    .swap-refresh-icon:active,
+    .logout-icon-btn:active{
+      background:#d2e3fc!important;
+      color:#174ea6!important;
+      border-color:#aecbfa!important;
+    }
+    .btn.primary:active,.btn.ok:active,.btn.danger:active{
+      filter:brightness(.92);
+      box-shadow:inset 0 0 0 999px rgba(0,0,0,.08)!important;
+    }
+    .user-chip{
+      font-size:12.5px!important;
+      font-weight:400!important;
+      max-width:120px!important;
+    }
+    .account-form-lite{
+      grid-template-columns:1fr!important;
+      max-width:680px!important;
+      width:100%!important;
+    }
+    .account-form-lite > div,
+    .account-form-lite input,
+    .account-form-lite select{
+      width:100%!important;
+      max-width:100%!important;
+      min-width:0!important;
+      box-sizing:border-box!important;
+    }
+    .account-form-lite .full{grid-column:1/-1!important;}
+    .account-actions-lite{max-width:680px!important;width:100%!important;}
+    @media (max-width:760px){
+      body{font-size:17px!important;}
+      button,input,select,textarea{font-size:16px!important;}
+      label{font-size:14.5px!important;line-height:1.35!important;}
+      .brand-title{font-size:15.8px!important;line-height:1.25!important;}
+      .brand-sub{font-size:12.5px!important;line-height:1.25!important;}
+      .user-chip{font-size:12.8px!important;max-width:86px!important;}
+      .btn{font-size:15px!important;min-height:40px!important;}
+      .tab-btn{font-size:13.2px!important;}
+      .tab-btn .ico .icon2d{width:23px!important;height:23px!important;}
+      .card-title{font-size:19px!important;}
+      .small,.muted,.status-line,.message,.request-item{font-size:14.5px!important;line-height:1.5!important;}
+      .paper-note{font-size:13.2px!important;line-height:1.55!important;}
+      .paper-title{font-size:17.2px!important;}
+      .paper-sub{font-size:12.8px!important;}
+      .day-title{font-size:11.8px!important;}
+      .schedule-table{font-size:10px!important;line-height:1.18!important;}
+      .schedule-table th,.schedule-table td{height:27px!important;line-height:1.18!important;}
+      .account-panel,
+      .account-layout-lite,
+      .account-content-lite,
+      .account-info-card-lite,
+      .account-form-lite,
+      .account-actions-lite{
+        width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+      }
+      .account-panel{padding:10px!important;}
+      .account-content-lite{padding:12px!important;overflow:visible!important;}
+      .account-row-lite{width:100%!important;grid-template-columns:1fr!important;gap:4px!important;}
+      .account-label-lite{font-size:14.5px!important;}
+      .account-value-lite{font-size:16px!important;line-height:1.45!important;}
+      .account-form-lite input,.account-form-lite select{height:42px!important;min-height:42px!important;}
+      .version-footer{font-size:12.5px!important;padding:14px 0 8px!important;}
+    }
+
 </style>
 </head>
 <body>
@@ -957,7 +1039,6 @@
       <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
     </div>
     <div class="top-actions">
-      <span id="versionChip" class="version-chip">Version 17.2</span>
       <span id="userChip" class="user-chip hidden"></span>
       <button id="btnLogin" class="btn primary" type="button">Đăng nhập</button>
       <button id="btnLogout" class="logout-icon-btn hidden" type="button" aria-label="Đăng xuất" title="Đăng xuất"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 19V5a2 2 0 0 0-2-2h-6"/></svg></button>
@@ -1068,6 +1149,8 @@
         <article id="paper" class="paper"></article>
       </div>
     </section>
+
+    <div id="versionFooter" class="version-footer">Version 18.2</div>
   </main>
 </div>
 
@@ -1100,7 +1183,7 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 17;
+const INDEX_VERSION = 18;
 const CODE_VERSION = 2;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -1142,6 +1225,7 @@ function init(){
   bindEvents();
   updateTabChrome('schedule');
   if($('versionChip')) $('versionChip').textContent = 'Version ' + APP_VERSION;
+  if($('versionFooter')) $('versionFooter').textContent = 'Version ' + APP_VERSION;
   $('weekStartInput').value = state.weekStart;
   restoreSession();
   loadPublicWeek();
@@ -1301,7 +1385,7 @@ function renderAuth(){
   $('btnLogout').classList.toggle('hidden', !logged);
   $('btnLogout').hidden = !logged;
   $('userChip').classList.toggle('hidden', !logged);
-  $('userChip').textContent = logged ? `${state.user.tenNhanVien}` : '';
+  $('userChip').textContent = logged ? compactDisplayName(state.user.tenNhanVien || state.user.maNhanVien || '') : '';
   if(logged) closeLogin();
   const canManage = logged && state.user.canManageSchedule;
   $('tabAdminBtn').classList.toggle('hidden', !canManage);
