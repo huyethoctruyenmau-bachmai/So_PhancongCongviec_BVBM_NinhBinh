@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 38.4</title>
+  <title>Lịch phân công công việc PXN - Version 39.4</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -1754,6 +1754,64 @@
       }
     }
 
+
+    /* ===== PATCH V39.4: MOBILE - Ô CHỌN NGÀY TUÂN THEO ĐỘ RỘNG CHUNG ===== */
+    @media (max-width:760px){
+      #swapPanel .swap-form-grid,
+      #proposalListPanel .proposal-filter-grid{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        box-sizing:border-box!important;
+      }
+      #swapPanel .swap-field,
+      #swapPanel .leave-inline-field,
+      #proposalListPanel .proposal-filter-field{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        box-sizing:border-box!important;
+      }
+      #swapPanel input,
+      #swapPanel select,
+      #proposalListPanel input,
+      #proposalListPanel select,
+      #proposalListPanel .proposal-view-btn{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        box-sizing:border-box!important;
+      }
+      #swapPanel input[type="date"],
+      #proposalListPanel input[type="date"]{
+        display:block!important;
+        inline-size:100%!important;
+        width:100%!important;
+        max-inline-size:100%!important;
+        max-width:100%!important;
+        min-inline-size:0!important;
+        min-width:0!important;
+        height:42px!important;
+        min-height:42px!important;
+        padding:6px 9px!important;
+        margin:0!important;
+        border-radius:8px!important;
+        line-height:20px!important;
+        text-align:left!important;
+        box-sizing:border-box!important;
+      }
+      #swapPanel input[type="date"]::-webkit-date-and-time-value,
+      #proposalListPanel input[type="date"]::-webkit-date-and-time-value{
+        text-align:left!important;
+        width:100%!important;
+        min-width:0!important;
+      }
+      #swapPanel input[type="date"]::-webkit-calendar-picker-indicator,
+      #proposalListPanel input[type="date"]::-webkit-calendar-picker-indicator{
+        margin-left:0!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -1965,7 +2023,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 38.4</div>
+    <div id="versionFooter" class="version-footer">Version 39.4</div>
   </main>
 </div>
 
@@ -2005,7 +2063,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 38;
+const INDEX_VERSION = 39;
 const CODE_VERSION = 4;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
