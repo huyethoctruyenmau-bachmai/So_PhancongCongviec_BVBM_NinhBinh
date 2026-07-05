@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 20.2</title>
+  <title>Lịch phân công công việc PXN - Version 21.2</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=16.1">
@@ -948,7 +948,7 @@
     }
 
 
-    /* ===== PATCH V20.2: AUTH HEADER VISIBILITY ===== */
+    /* ===== PATCH V21.2: AUTH HEADER MOBILE USER VISIBLE ===== */
     .version-footer{
       width:100%;text-align:center;color:var(--muted);font-size:12px;line-height:1.4;
       padding:12px 0 4px;margin:0 auto;
@@ -1086,7 +1086,7 @@
       }
     }
 
-    /* ===== PATCH V20.2: ẨN ĐĂNG XUẤT KHI CHƯA ĐĂNG NHẬP + ẨN USER TRÊN ĐIỆN THOẠI ===== */
+    /* ===== PATCH V21.2: ẨN ĐĂNG XUẤT KHI CHƯA ĐĂNG NHẬP + HIỆN USER TRÊN ĐIỆN THOẠI ===== */
     #btnLogout.hidden,
     #btnLogout[hidden],
     body:not(.is-logged-in) #btnLogout{
@@ -1100,17 +1100,32 @@
       pointer-events:none!important;
     }
     @media (max-width:760px){
-      #userChip,
-      .user-chip{
+      body.is-logged-in #userChip.user-chip:not(.hidden){
+        display:inline-block!important;
+        visibility:visible!important;
+        width:auto!important;
+        max-width:58px!important;
+        overflow:hidden!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+        font-size:11.5px!important;
+        line-height:1.2!important;
+        opacity:.95!important;
+      }
+      body:not(.is-logged-in) #userChip,
+      #userChip.hidden{
         display:none!important;
         visibility:hidden!important;
-        max-width:0!important;
-        width:0!important;
-        overflow:hidden!important;
       }
       .top-actions{
         flex:0 0 auto!important;
         gap:4px!important;
+        max-width:96px!important;
+      }
+      .logout-icon-btn{
+        width:30px!important;
+        min-width:30px!important;
+        height:30px!important;
       }
     }
 
@@ -1120,7 +1135,7 @@
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <img class="brand-logo" src="./APP_LOGO_BVBM.png?v=20.2" alt="Logo Bệnh viện Bạch Mai">
+      <img class="brand-logo" src="./APP_LOGO_BVBM.png?v=21.2" alt="Logo Bệnh viện Bạch Mai">
       <div class="brand-text">
         <div class="brand-title">Khoa Huyết học và Truyền máu</div>
         <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
@@ -1238,7 +1253,7 @@
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 20.2</div>
+    <div id="versionFooter" class="version-footer">Version 21.2</div>
   </main>
 </div>
 
@@ -1271,7 +1286,7 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 19;
+const INDEX_VERSION = 21;
 const CODE_VERSION = 2;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
