@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 18.2</title>
+  <title>Lịch phân công công việc PXN - Version 19.2</title>
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=16.1">
   <link rel="apple-touch-icon" sizes="180x180" href="./APP_ICON_LICH_PHAN_CONG_180.png?v=16.1">
@@ -948,7 +948,7 @@
     }
 
 
-    /* ===== PATCH V18.2: MOBILE FONT + ACTIVE FILL + HEADER CLEAN + ACCOUNT FULL WIDTH ===== */
+    /* ===== PATCH V19.2: HEADER LOGO BVBM ===== */
     .version-footer{
       width:100%;text-align:center;color:var(--muted);font-size:12px;line-height:1.4;
       padding:12px 0 4px;margin:0 auto;
@@ -1029,14 +1029,74 @@
       .version-footer{font-size:12.5px!important;padding:14px 0 8px!important;}
     }
 
+    /* ===== PATCH V19.2: LOGO BÊN TRÁI THÔNG TIN ĐƠN VỊ TRÊN HEADER ===== */
+    .brand{
+      display:flex!important;
+      align-items:center!important;
+      gap:9px!important;
+      min-width:0!important;
+      flex:1 1 auto!important;
+      overflow:hidden!important;
+    }
+    .brand-logo{
+      width:38px!important;
+      height:38px!important;
+      min-width:38px!important;
+      max-width:38px!important;
+      min-height:38px!important;
+      max-height:38px!important;
+      object-fit:contain!important;
+      display:block!important;
+      flex:0 0 38px!important;
+      border-radius:50%!important;
+      background:#fff!important;
+    }
+    .brand-text{
+      min-width:0!important;
+      display:block!important;
+      overflow:hidden!important;
+    }
+    .brand-title,
+    .brand-sub{
+      display:block!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+    }
+    @media (max-width:760px){
+      .brand{
+        gap:7px!important;
+        max-width:calc(100vw - 120px)!important;
+      }
+      .brand-logo{
+        width:32px!important;
+        height:32px!important;
+        min-width:32px!important;
+        max-width:32px!important;
+        min-height:32px!important;
+        max-height:32px!important;
+        flex-basis:32px!important;
+      }
+      .brand-title{
+        font-size:13.5px!important;
+        line-height:1.18!important;
+      }
+      .brand-sub{
+        font-size:10.5px!important;
+        line-height:1.18!important;
+      }
+    }
+
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <div class="brand-title">Khoa Huyết học và Truyền máu</div>
-      <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
+      <img class="brand-logo" src="./APP_LOGO_BVBM.png?v=19.2" alt="Logo Bệnh viện Bạch Mai">
+      <div class="brand-text">
+        <div class="brand-title">Khoa Huyết học và Truyền máu</div>
+        <div class="brand-sub">Phòng: XNHH CS Ninh Bình</div>
+      </div>
     </div>
     <div class="top-actions">
       <span id="userChip" class="user-chip hidden"></span>
@@ -1150,7 +1210,7 @@
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 18.2</div>
+    <div id="versionFooter" class="version-footer">Version 19.2</div>
   </main>
 </div>
 
@@ -1183,7 +1243,7 @@
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 18;
+const INDEX_VERSION = 19;
 const CODE_VERSION = 2;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
