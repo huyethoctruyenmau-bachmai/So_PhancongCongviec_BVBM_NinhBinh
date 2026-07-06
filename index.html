@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 65.11</title>
+  <title>Lịch phân công công việc PXN - Version 66.11</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2577,6 +2577,53 @@
       -webkit-font-smoothing:antialiased!important;
     }
 
+
+    /* ===== PATCH V66.11: DESKTOP - HỘP PHÂN CÔNG THAY THẾ RỘNG/Cao HƠN, HẠN CHẾ CUỘN ===== */
+    @media (min-width:761px){
+      #leaveReplaceModal{
+        align-items:center!important;
+        padding:24px!important;
+      }
+      #leaveReplaceModal .modal-card{
+        width:min(1180px,calc(100vw - 64px))!important;
+        max-width:min(1180px,calc(100vw - 64px))!important;
+        max-height:calc(100vh - 64px)!important;
+        padding:20px!important;
+      }
+      #leaveReplaceModal .modal-head{
+        top:-20px!important;
+      }
+      #leaveReplaceModal .leave-replacement-title{
+        font-size:19px!important;
+        line-height:1.35!important;
+      }
+      #leaveReplaceModal .leave-replace-table-wrap{
+        max-height:calc(100vh - 260px)!important;
+        overflow:auto!important;
+      }
+      #leaveReplaceModal .leave-replace-table{
+        width:100%!important;
+        min-width:900px!important;
+      }
+      #leaveReplaceModal .leave-replace-table th,
+      #leaveReplaceModal .leave-replace-table td{
+        padding:8px 10px!important;
+        vertical-align:middle!important;
+      }
+      #leaveReplaceModal .leave-replacement-select{
+        min-height:38px!important;
+      }
+      #leaveReplaceModal .btn-row{
+        position:sticky!important;
+        bottom:-20px!important;
+        background:#fff!important;
+        padding-top:12px!important;
+        padding-bottom:2px!important;
+        border-top:1px solid var(--line)!important;
+        z-index:2!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -2788,7 +2835,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 65.11</div>
+    <div id="versionFooter" class="version-footer">Version 66.11</div>
   </main>
 </div>
 
@@ -2842,7 +2889,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 65;
+const INDEX_VERSION = 66;
 const CODE_VERSION = 11;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -4258,7 +4305,7 @@ function openLeaveReplacementModal(requestId, conflicts){
     <td><select class="leave-replacement-select" data-assignment-id="${escAttr(c.assignmentId)}"><option value="">Chọn người thay thế</option>${options}</select></td>
   </tr>`).join('');
   const html = `<div id="leaveReplaceModal" class="modal">
-    <div class="modal-card" style="max-width:860px">
+    <div class="modal-card leave-replace-card">
       <div class="modal-head"><div class="modal-title leave-replacement-title">Phân công người thay thế trước khi duyệt nghỉ phép</div><button class="close" type="button" onclick="closeLeaveReplacementModal()">×</button></div>
       <div class="small">Nhân viên xin nghỉ đang có phân công. Vui lòng chọn người thay thế cho từng vị trí rồi bấm duyệt.</div>
       <div class="leave-replace-table-wrap"><table class="leave-replace-table"><thead><tr><th>Ngày</th><th>Vị trí</th><th>Người nghỉ</th><th>Người thay thế</th></tr></thead><tbody>${rows}</tbody></table></div>
