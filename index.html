@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 56.11</title>
+  <title>Lịch phân công công việc PXN - Version 58.11</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2382,6 +2382,94 @@
       }
     }
 
+
+    /* ===== PATCH V57.11: CHUẨN HÓA HIỆU ỨNG LOADING TOÀN APP ===== */
+    .btn .loading-dot,
+    button .loading-dot{
+      display:inline-block!important;
+      width:15px!important;
+      height:15px!important;
+      min-width:15px!important;
+      min-height:15px!important;
+      border:2px solid rgba(255,255,255,.55)!important;
+      border-top-color:#fff!important;
+      border-radius:50%!important;
+      animation:spin .75s linear infinite!important;
+      flex:0 0 auto!important;
+      box-sizing:border-box!important;
+      opacity:1!important;
+      vertical-align:-2px!important;
+    }
+    button.is-loading{
+      opacity:.62!important;
+      pointer-events:none!important;
+      cursor:not-allowed!important;
+      color:inherit!important;
+      display:inline-flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:8px!important;
+      white-space:nowrap!important;
+    }
+    button.is-loading > *{opacity:1!important}
+    button.is-loading::after{
+      display:none!important;
+      content:none!important;
+    }
+    button.is-loading.btn.primary .loading-dot,
+    button.is-loading.btn.ok .loading-dot,
+    button.is-loading.btn.danger .loading-dot{
+      border-color:rgba(255,255,255,.55)!important;
+      border-top-color:#fff!important;
+    }
+    button.is-loading.btn.secondary .loading-dot,
+    button.is-loading.btn.ghost .loading-dot,
+    button.is-loading.swap-refresh-icon .loading-dot,
+    button.is-loading.proposal-refresh-icon .loading-dot,
+    button.is-loading.tab-day .loading-dot,
+    button.is-loading:not(.primary):not(.ok):not(.danger) .loading-dot{
+      border-color:#d2e3fc!important;
+      border-top-color:var(--g-blue)!important;
+    }
+    .loading-label{
+      display:inline-block!important;
+      max-width:100%!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+      opacity:1!important;
+    }
+
+
+    /* ===== PATCH V58.11: THẺ ĐĂNG KÝ NGHỈ PHÉP ===== */
+    .request-type-blue{
+      color:var(--g-blue)!important;
+      font-weight:800!important;
+      font-size:16px!important;
+      line-height:1.35!important;
+      margin-bottom:3px!important;
+    }
+    .leave-card-body{
+      margin-top:10px!important;
+      display:grid!important;
+      grid-template-columns:1fr!important;
+      gap:4px!important;
+      line-height:1.45!important;
+    }
+    .leave-card-body div{
+      min-width:0!important;
+      overflow-wrap:anywhere!important;
+    }
+    .leave-card-time{
+      color:var(--g-muted)!important;
+      font-size:13.5px!important;
+      line-height:1.35!important;
+    }
+    @media (max-width:760px){
+      .request-type-blue{font-size:16.5px!important}
+      .leave-card-time{font-size:14px!important}
+      .leave-card-body{font-size:14.5px!important}
+    }
+
 </style>
 </head>
 <body>
@@ -2593,7 +2681,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 56.11</div>
+    <div id="versionFooter" class="version-footer">Version 58.11</div>
   </main>
 </div>
 
@@ -2647,7 +2735,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 56;
+const INDEX_VERSION = 58;
 const CODE_VERSION = 11;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -2898,64 +2986,94 @@ function showCenterNotice(message, type='ok'){
   card.className = `center-notice-card ${type || 'ok'}`;
   card.textContent = message || '';
   box.classList.remove('hidden');
-  const startPromise = new Promise(resolve => {
+
+  const shownPromise = new Promise(resolve => {
     const raf = window.requestAnimationFrame || (fn => setTimeout(fn, 0));
-    raf(() => resolve());
+    raf(() => raf(() => setTimeout(resolve, 420)));
   });
+
   box.dataset.timer = String(setTimeout(() => {
     box.classList.add('hidden');
     box.dataset.timer = '';
-  }, type === 'err' ? 4200 : 3000));
-  return startPromise;
+  }, type === 'err' ? 4600 : 3200));
+  return shownPromise;
 }
 
 function sleep(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
 function buttonBusyText(btn){
   if(!btn) return 'Đang xử lý...';
-  const text = String(btn.textContent || '').trim();
+  const text = String(btn.textContent || '').replace(/×/g, '').trim();
   if(text) return text;
   const label = btn.getAttribute('aria-label') || btn.getAttribute('title') || 'Đang xử lý...';
   return String(label || 'Đang xử lý...').trim();
 }
 
+function buttonLoadingHtml(btn){
+  const label = esc(buttonBusyText(btn));
+  return `<span class="loading-dot" aria-hidden="true"></span><span class="loading-label">${label}</span>`;
+}
+
 function startButtonLoading(btn){
-  if(!btn || btn.disabled) return;
+  if(!btn || btn.disabled) return false;
   btn.dataset.loadingBound = '1';
   if(btn.dataset.loadingCount === undefined){
     btn.dataset.wasDisabled = btn.disabled ? '1' : '0';
     btn.dataset.originalHtml = btn.innerHTML;
+    btn.dataset.originalMinWidth = btn.style.minWidth || '';
+    const rect = btn.getBoundingClientRect ? btn.getBoundingClientRect() : null;
+    if(rect && rect.width) btn.style.minWidth = Math.ceil(rect.width) + 'px';
+    btn.dataset.loadingStartedAt = String(Date.now());
   }
   btn.dataset.loadingCount = String((Number(btn.dataset.loadingCount || 0) || 0) + 1);
   btn.classList.add('is-loading');
   btn.setAttribute('aria-busy', 'true');
   btn.disabled = true;
-  btn.innerHTML = `<span class="loading-dot"></span><span>${esc(buttonBusyText(btn))}</span>`;
+  btn.innerHTML = buttonLoadingHtml(btn);
+  return true;
 }
 
-function stopButtonLoading(btn){
-  if(!btn) return;
-  const next = Math.max(0, (Number(btn.dataset.loadingCount || 1) || 1) - 1);
-  btn.dataset.loadingCount = String(next);
-  if(next > 0) return;
+function finishButtonLoading(btn){
   btn.classList.remove('is-loading');
   btn.removeAttribute('aria-busy');
   if(btn.dataset.originalHtml !== undefined) btn.innerHTML = btn.dataset.originalHtml;
+  if(btn.dataset.originalMinWidth !== undefined) btn.style.minWidth = btn.dataset.originalMinWidth;
   if(btn.dataset.wasDisabled !== '1') btn.disabled = false;
   delete btn.dataset.loadingCount;
   delete btn.dataset.loadingBound;
   delete btn.dataset.wasDisabled;
   delete btn.dataset.originalHtml;
+  delete btn.dataset.originalMinWidth;
+  delete btn.dataset.loadingStartedAt;
+  delete btn.dataset.loadingStopTimer;
 }
+
+function stopButtonLoading(btn){
+  if(!btn) return;
+  const count = Number(btn.dataset.loadingCount || 1) || 1;
+  if(count > 1){
+    btn.dataset.loadingCount = String(count - 1);
+    return;
+  }
+  const startedAt = Number(btn.dataset.loadingStartedAt || Date.now()) || Date.now();
+  const elapsed = Date.now() - startedAt;
+  const minMs = Number(btn.dataset.loadingMinMs || 620) || 620;
+  const remain = Math.max(0, minMs - elapsed);
+  if(remain > 0){
+    if(btn.dataset.loadingStopTimer) clearTimeout(Number(btn.dataset.loadingStopTimer));
+    btn.dataset.loadingStopTimer = String(setTimeout(() => finishButtonLoading(btn), remain));
+    return;
+  }
+  finishButtonLoading(btn);
+}
+
 function withButtonLoading(handler){
   return async function(event){
     const btn = event && event.currentTarget ? event.currentTarget : null;
-    startButtonLoading(btn);
-    const started = Date.now();
+    const started = startButtonLoading(btn);
     try{
       return await handler.call(this, event);
     }finally{
-      const remain = Math.max(0, 320 - (Date.now() - started));
-      setTimeout(() => stopButtonLoading(btn), remain);
+      if(started) stopButtonLoading(btn);
     }
   };
 }
@@ -3655,6 +3773,11 @@ function renderRequests(items){
   }
   $('requestList').innerHTML = items.map(item => {
     const canRespond = item.isReceiver && (item.trangThai === 'CHO_XAC_NHAN' || item.trangThai === 'CHO_PHE_DUYET');
+    const actionHtml = `<div class="btn-row">
+        ${canRespond ? `<button class="btn ok" type="button" onclick="respondRequest('${escAttr(item.requestId)}','DONG_Y', this)">Đồng ý</button>
+        <button class="btn danger" type="button" onclick="respondRequest('${escAttr(item.requestId)}','TU_CHOI', this)">Từ chối</button>` : ''}
+      </div>`;
+    if(isLeaveRequest(item)) return renderLeaveRequestCardHtml(item, actionHtml);
     return `<div class="request-item">
       <div class="request-head">
         <div>
@@ -3666,10 +3789,7 @@ function renderRequests(items){
       <div class="small" style="margin-top:6px">
         ${renderRequestDetailHtml(item)}
       </div>
-      <div class="btn-row">
-        ${canRespond ? `<button class="btn ok" type="button" onclick="respondRequest('${escAttr(item.requestId)}','DONG_Y', this)">Đồng ý</button>
-        <button class="btn danger" type="button" onclick="respondRequest('${escAttr(item.requestId)}','TU_CHOI', this)">Từ chối</button>` : ''}
-      </div>
+      ${actionHtml}
     </div>`;
   }).join('');
 }
@@ -3747,6 +3867,7 @@ function renderProposalList(items){
     const actionHtml = canRespond
       ? `<div class="btn-row"><button class="btn ok" type="button" onclick="respondRequest('${escAttr(item.requestId)}','DONG_Y', this)">Đồng ý</button><button class="btn danger" type="button" onclick="respondRequest('${escAttr(item.requestId)}','TU_CHOI', this)">Từ chối</button></div>`
       : (canCancel ? `<div class="btn-row"><button class="btn secondary" type="button" onclick="cancelRequest('${escAttr(item.requestId)}', this)">Xóa đề xuất</button></div>` : '');
+    if(isLeaveRequest(item)) return renderLeaveRequestCardHtml(item, actionHtml, 'proposal-history-item');
     return `<div class="request-item proposal-history-item">
       <div class="request-head">
         <div>
@@ -3915,16 +4036,53 @@ function requestTypeText(item){
   if(t === 'DOI_NGANG') return 'Đổi vị trí';
   return 'Nhờ làm hộ';
 }
+function isLeaveRequest(item){
+  return (item && (item.type || item.kieuDoi)) === 'NGHI_PHEP';
+}
+
 function leaveText(leave){
   if(!leave) return '';
-  const from = leave.fromDate ? dateVi(leave.fromDate) : '';
-  const to = leave.toDate ? dateVi(leave.toDate) : from;
-  const start = normalizeShift(leave.startPart) === 'PM' ? 'chiều' : 'sáng';
-  const end = normalizeShift(leave.endPart) === 'AM' ? 'sáng' : 'chiều';
-  return `Từ ${from} (${start}) đến ${to} (${end})`;
+  const fromIso = leave.fromDate || '';
+  const toIso = leave.toDate || fromIso;
+  const from = fromIso ? dateVi(fromIso) : '';
+  const to = toIso ? dateVi(toIso) : from;
+  const startShift = normalizeShift(leave.startPart);
+  const endShift = normalizeShift(leave.endPart);
+  if(!from) return '';
+
+  if(fromIso === toIso || !toIso){
+    if(startShift === 'AM' && endShift === 'AM') return `${from} (sáng)`;
+    if(startShift === 'PM' && endShift === 'PM') return `${from} (chiều)`;
+    return from;
+  }
+
+  const startSuffix = startShift === 'PM' ? ' (chiều)' : '';
+  const endSuffix = endShift === 'AM' ? ' (sáng)' : '';
+  return `từ ${from}${startSuffix} đến ${to}${endSuffix}`;
 }
+
+function renderLeaveRequestCardHtml(item, actionHtml='', extraClass=''){
+  const created = formatDateTimeVi(item.createdAt) || item.createdAt || '';
+  return `<div class="request-item leave-request-card ${escAttr(extraClass || '')}">
+    <div class="request-head">
+      <div>
+        <div class="request-type-blue">Đăng ký nghỉ phép</div>
+        <div class="leave-card-time"><strong>T/G tạo:</strong> ${esc(created)}</div>
+      </div>
+      <span class="pill ${pillClass(item.trangThai)}">${esc(requestStatusText(item.trangThai))}</span>
+    </div>
+    <div class="leave-card-body small">
+      <div><strong>Người đề xuất:</strong> ${esc(item.nguoiDeXuatTen || '')}</div>
+      <div><strong>Người nhận/phê duyệt:</strong> ${esc(item.nguoiNhanTen || '')}</div>
+      ${item.leave ? `<div><strong>Thời gian nghỉ:</strong> ${esc(leaveText(item.leave))}</div>` : ''}
+      ${item.lyDo ? `<div><strong>Lý do:</strong> ${esc(item.lyDo)}</div>` : ''}
+    </div>
+    ${actionHtml || ''}
+  </div>`;
+}
+
 function renderRequestDetailHtml(item){
-  if((item.type || item.kieuDoi) === 'NGHI_PHEP'){
+  if(isLeaveRequest(item)){
     return `${item.leave ? `<div><strong>Thời gian nghỉ:</strong> ${esc(leaveText(item.leave))}</div>` : ''}
       ${item.lyDo ? `<div><strong>Lý do:</strong> ${esc(item.lyDo)}</div>` : ''}`;
   }
