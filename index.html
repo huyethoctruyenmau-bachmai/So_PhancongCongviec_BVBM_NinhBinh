@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 43.5</title>
+  <title>Lịch phân công công việc PXN - Version 44.8</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2063,6 +2063,43 @@
       }
     }
 
+
+    /* ===== PATCH V44.8: MOBILE ĐỔI LỊCH ẨN NGHỈ PHÉP + TẠO LỊCH 2 NÚT/1 DÒNG ===== */
+    @media (max-width:760px){
+      #swapPanel:not(.mode-leave) .leave-only,
+      #swapPanel:not(.mode-leave) .leave-date-row,
+      #swapPanel.mode-leave .swap-only,
+      #swapPanel #targetAssignmentBox.hidden{
+        display:none!important;
+      }
+      #swapPanel.mode-leave .leave-date-row:not(.hidden){
+        display:grid!important;
+      }
+      #adminPanel #editorTabs{
+        display:grid!important;
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        gap:8px!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        overflow:visible!important;
+        box-sizing:border-box!important;
+      }
+      #adminPanel #editorTabs .tab-day{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        min-height:40px!important;
+        padding:6px 8px!important;
+        font-size:13px!important;
+        font-weight:800!important;
+        line-height:1.2!important;
+        white-space:normal!important;
+        text-align:center!important;
+        box-sizing:border-box!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -2274,7 +2311,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 43.5</div>
+    <div id="versionFooter" class="version-footer">Version 44.8</div>
   </main>
 </div>
 
@@ -2314,8 +2351,8 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 43;
-const CODE_VERSION = 5;
+const INDEX_VERSION = 44;
+const CODE_VERSION = 8;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
 const POSITIONS = [
@@ -3067,9 +3104,24 @@ function refreshSwapFormMode(){
   const type = $('swapType').value;
   const isLeave = type === 'NGHI_PHEP';
   const isSwap = type === 'DOI_NGANG';
-  document.querySelectorAll('.leave-only').forEach(el => el.classList.toggle('hidden', !isLeave));
-  document.querySelectorAll('.swap-only').forEach(el => el.classList.toggle('hidden', isLeave));
-  if($('targetAssignmentBox')) $('targetAssignmentBox').classList.toggle('hidden', isLeave || !isSwap);
+  const panel = $('swapPanel');
+  if(panel){
+    panel.classList.toggle('mode-leave', isLeave);
+    panel.classList.toggle('mode-swap', !isLeave);
+  }
+  document.querySelectorAll('.leave-only').forEach(el => {
+    el.classList.toggle('hidden', !isLeave);
+    el.style.display = isLeave ? '' : 'none';
+  });
+  document.querySelectorAll('.swap-only').forEach(el => {
+    el.classList.toggle('hidden', isLeave);
+    el.style.display = isLeave ? 'none' : '';
+  });
+  if($('targetAssignmentBox')){
+    const hideTarget = isLeave || !isSwap;
+    $('targetAssignmentBox').classList.toggle('hidden', hideTarget);
+    $('targetAssignmentBox').style.display = hideTarget ? 'none' : '';
+  }
   if($('receiverLabel')) $('receiverLabel').textContent = isLeave ? 'Người phê duyệt' : 'Người được đề xuất';
   if($('receiverInput')) $('receiverInput').placeholder = isLeave ? 'Gõ tên hoặc mã người phê duyệt' : 'Gõ tên hoặc mã nhân viên';
   if(!isLeave) ensureSwapDateDefault();
@@ -3077,6 +3129,7 @@ function refreshSwapFormMode(){
   if($('leaveToDate') && !$('leaveToDate').value) $('leaveToDate').value = state.weekStart;
   populateMyAssignments();
   populateTargetAssignments();
+  refreshViDatePickers();
 }
 
 async function refreshSwapData(){
