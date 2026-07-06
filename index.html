@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 50.8</title>
+  <title>Lịch phân công công việc PXN - Version 52.8</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2286,6 +2286,17 @@
       }
     }
 
+
+    /* ===== PATCH V51.8: TẠO LỊCH - CHỮ CA/BUỔI MÀU XANH DƯƠNG ===== */
+    #adminPanel .edit-shift{
+      color:var(--g-blue)!important;
+      font-weight:500!important;
+    }
+    #adminPanel .edit-shift option{
+      color:var(--g-blue)!important;
+      font-weight:500!important;
+    }
+
 </style>
 </head>
 <body>
@@ -2428,7 +2439,7 @@
       </div>
       <div id="adminMessage"></div>
       <div class="small" style="margin-top:8px">
-Màu đỏ: người làm trưa.
+Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu chọn sáng/chiều, bảng chỉ ghi thêm (sáng) hoặc (chiều); cả ngày không ghi thêm.
       </div>
       <div id="editorTabs" class="tabs"></div>
       <div id="editorBox"></div>
@@ -2497,7 +2508,7 @@ Màu đỏ: người làm trưa.
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 50.8</div>
+    <div id="versionFooter" class="version-footer">Version 52.8</div>
   </main>
 </div>
 
@@ -2551,7 +2562,7 @@ Màu đỏ: người làm trưa.
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 50;
+const INDEX_VERSION = 52;
 const CODE_VERSION = 8;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -2635,8 +2646,8 @@ function bindEvents(){
 
   $('btnLoadAdminWeek').onclick = withButtonLoading(loadAdminWeek);
   if($('btnCopyPrevWeek')) $('btnCopyPrevWeek').onclick = withButtonLoading(copyPrevWeek);
-  $('btnSaveDraft').onclick = withButtonLoading(saveDraft);
-  $('btnPublishWeek').onclick = publishWeek;
+  $('btnSaveDraft').onclick = withButtonLoading(() => saveDraft(false));
+  $('btnPublishWeek').onclick = withButtonLoading(() => publishWeek());
 
   $('swapType').onchange = refreshSwapFormMode;
   if($('swapDate')) $('swapDate').onchange = () => { populateMyAssignments(); populateTargetAssignments(); };
@@ -3042,9 +3053,7 @@ function renderPaper(){
     </div>
     ${daysHtml}
     <div class="paper-note">
-      <strong>Ghi chú:</strong>
-Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu chọn sáng/chiều, bảng chỉ ghi thêm (sáng) hoặc (chiều); cả ngày không ghi thêm.
-      Trực: T2–T6 là trực đêm; T7, Chủ nhật là trực cả ngày. Mỗi tua trực gồm 3 người.
+      <strong>Ghi chú:</strong> Tên nhân viên màu đỏ: làm trưa
     </div>`;
 }
 
@@ -3262,16 +3271,20 @@ function updateEditCell(input){
 
 async function saveDraft(silent){
   ensureLogged();
+  const isSilent = silent === true;
   if(!state.editData) await loadAdminWeek();
+  const localEditData = cloneWeekData(state.editData);
   try{
-    if(!silent) setMsg('adminMessage', 'Đang lưu nháp...', 'warn');
+    if(!isSilent) setMsg('adminMessage', 'Đang lưu nháp...', 'warn');
     const payload = { weekStart: state.weekStart, days: collectEditDays() };
     const res = await api('saveWeekSchedule', { token: state.token, payload });
-    state.editData = JSON.parse(JSON.stringify(res.data));
-    state.weekData = res.data.status === 'PUBLISHED' || res.data.status === 'LOCKED' ? res.data : state.weekData;
+    const merged = mergeShiftStateIntoWeek(res.data, localEditData);
+    state.editData = cloneWeekData(merged);
+    state.weekData = merged.status === 'PUBLISHED' || merged.status === 'LOCKED' ? merged : state.weekData;
     renderEditor();
     if(state.weekData) renderPaper();
-    if(!silent) showWarnings('adminMessage', [], 'Đã lưu nháp.');
+    if(!isSilent) showWarnings('adminMessage', [], 'Đã lưu nháp.');
+    return merged;
   }catch(e){
     setMsg('adminMessage', e.message, 'err');
     throw e;
@@ -3280,19 +3293,60 @@ async function saveDraft(silent){
 
 async function publishWeek(){
   ensureLogged();
+  const localEditData = cloneWeekData(state.editData);
   try{
     if(!state.editData) await loadAdminWeek();
     await saveDraft(true);
     const res = await api('publishWeekSchedule', { token: state.token, payload: { weekStart: state.weekStart } });
-    state.weekData = res.data;
-    state.editData = JSON.parse(JSON.stringify(res.data));
+    const merged = mergeShiftStateIntoWeek(res.data, localEditData || state.editData);
+    state.weekData = merged;
+    state.editData = cloneWeekData(merged);
     renderWeekLabel();
     renderPaper();
     renderEditor();
     showWarnings('adminMessage', [], 'Đã công bố lịch tuần.');
   }catch(e){
     setMsg('adminMessage', e.message, 'err');
+    throw e;
   }
+}
+
+function cloneWeekData(data){
+  return data ? JSON.parse(JSON.stringify(data)) : data;
+}
+
+function mergeShiftStateIntoWeek(target, source){
+  if(!target || !source || !Array.isArray(target.days) || !Array.isArray(source.days)) return target;
+  const sourceMap = {};
+  source.days.forEach(day => {
+    POSITIONS.forEach(pos => {
+      (((day.assignments || {})[pos.key]) || []).forEach(item => {
+        const keys = [
+          [day.date, pos.key, item.assignmentId || '', item.stt || '', item.hoTen || ''].join('|'),
+          [day.date, pos.key, item.stt || '', normalizeText(item.hoTen || '')].join('|')
+        ];
+        keys.forEach(k => { sourceMap[k] = item; });
+      });
+    });
+  });
+  target.days.forEach(day => {
+    POSITIONS.forEach(pos => {
+      (((day.assignments || {})[pos.key]) || []).forEach(item => {
+        const keys = [
+          [day.date, pos.key, item.assignmentId || '', item.stt || '', item.hoTen || ''].join('|'),
+          [day.date, pos.key, item.stt || '', normalizeText(item.hoTen || '')].join('|')
+        ];
+        const src = keys.map(k => sourceMap[k]).find(Boolean);
+        if(src){
+          item.shift = normalizeShift(src.shift || item.shift || 'FULL');
+          if(src.lamTrua !== undefined) item.lamTrua = !!src.lamTrua;
+        }else{
+          item.shift = normalizeShift(item.shift || 'FULL');
+        }
+      });
+    });
+  });
+  return target;
 }
 
 function collectEditDays(){
