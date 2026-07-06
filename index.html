@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 61.11</title>
+  <title>Lịch phân công công việc PXN - Version 62.11</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2518,6 +2518,27 @@
       -webkit-font-smoothing:antialiased!important;
     }
 
+
+    /* ===== PATCH V62.11: LOGIN VIẾT HOA + TIÊU ĐỀ HỘP XÁC NHẬN KHÔNG IN ĐẬM ===== */
+    .login-form-title{
+      font-family:Arial,sans-serif!important;
+      text-transform:uppercase!important;
+      font-weight:700!important;
+      letter-spacing:0!important;
+      font-style:normal!important;
+      text-rendering:optimizeLegibility!important;
+      -webkit-font-smoothing:antialiased!important;
+    }
+    #appConfirmTitle,
+    #appConfirmModal .modal-title{
+      font-family:Arial,sans-serif!important;
+      font-weight:400!important;
+      letter-spacing:0!important;
+      font-style:normal!important;
+      text-rendering:optimizeLegibility!important;
+      -webkit-font-smoothing:antialiased!important;
+    }
+
 </style>
 </head>
 <body>
@@ -2729,7 +2750,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 61.11</div>
+    <div id="versionFooter" class="version-footer">Version 62.11</div>
   </main>
 </div>
 
@@ -2783,7 +2804,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 61;
+const INDEX_VERSION = 62;
 const CODE_VERSION = 11;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
