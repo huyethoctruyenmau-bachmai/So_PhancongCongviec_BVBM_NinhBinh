@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 55.10</title>
+  <title>Lịch phân công công việc PXN - Version 56.11</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2338,6 +2338,50 @@
     button.is-loading::after{display:none!important;content:none!important}
     @keyframes spin{to{transform:rotate(360deg)}}
 
+
+    /* ===== PATCH V56.11: THÔNG BÁO GIỮA MÀN HÌNH KHI LƯU/CÔNG BỐ ===== */
+    .center-notice{
+      position:fixed;
+      inset:0;
+      z-index:100900;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      pointer-events:none;
+      background:transparent;
+    }
+    .center-notice.hidden{display:none!important}
+    .center-notice-card{
+      width:min(420px,calc(100vw - 36px));
+      border-radius:16px;
+      background:#fff;
+      border:1px solid var(--g-line);
+      box-shadow:0 12px 36px rgba(60,64,67,.25);
+      padding:18px 20px;
+      text-align:center;
+      color:var(--g-text);
+      font-size:16px;
+      line-height:1.45;
+      font-weight:700;
+      animation:centerNoticeIn .16s ease-out;
+    }
+    .center-notice-card.ok{border-left:5px solid var(--g-ok)}
+    .center-notice-card.err{border-left:5px solid var(--g-danger); color:var(--g-danger)}
+    .center-notice-card.warn{border-left:5px solid #f9ab00}
+    @keyframes centerNoticeIn{
+      from{opacity:0;transform:translateY(8px) scale(.98)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+    @media (max-width:760px){
+      .center-notice-card{
+        width:calc(100vw - 28px);
+        padding:16px;
+        border-radius:14px;
+        font-size:16px;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -2549,7 +2593,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 55.10</div>
+    <div id="versionFooter" class="version-footer">Version 56.11</div>
   </main>
 </div>
 
@@ -2603,8 +2647,8 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 55;
-const CODE_VERSION = 10;
+const INDEX_VERSION = 56;
+const CODE_VERSION = 11;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
 const POSITIONS = [
@@ -2831,6 +2875,38 @@ function closeAppConfirm(result){
   const resolver = appConfirmResolver;
   appConfirmResolver = null;
   if(resolver) resolver(!!result);
+}
+
+function ensureCenterNotice(){
+  let box = $('centerNotice');
+  if(box) return box;
+  box = document.createElement('div');
+  box.id = 'centerNotice';
+  box.className = 'center-notice hidden';
+  box.innerHTML = '<div id="centerNoticeCard" class="center-notice-card ok"></div>';
+  document.body.appendChild(box);
+  return box;
+}
+
+function showCenterNotice(message, type='ok'){
+  const box = ensureCenterNotice();
+  const card = $('centerNoticeCard') || box.querySelector('.center-notice-card');
+  if(box.dataset.timer){
+    clearTimeout(Number(box.dataset.timer));
+    box.dataset.timer = '';
+  }
+  card.className = `center-notice-card ${type || 'ok'}`;
+  card.textContent = message || '';
+  box.classList.remove('hidden');
+  const startPromise = new Promise(resolve => {
+    const raf = window.requestAnimationFrame || (fn => setTimeout(fn, 0));
+    raf(() => resolve());
+  });
+  box.dataset.timer = String(setTimeout(() => {
+    box.classList.add('hidden');
+    box.dataset.timer = '';
+  }, type === 'err' ? 4200 : 3000));
+  return startPromise;
 }
 
 function sleep(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -3352,10 +3428,14 @@ async function saveDraft(silent){
     state.weekData = merged.status === 'PUBLISHED' || merged.status === 'LOCKED' ? merged : state.weekData;
     renderEditor();
     if(state.weekData) renderPaper();
-    if(!isSilent) showWarnings('adminMessage', [], 'Đã lưu nháp.');
+    if(!isSilent){
+      clearMsg('adminMessage');
+      await showCenterNotice('Đã lưu nháp lịch tuần.', 'ok');
+    }
     return merged;
   }catch(e){
     setMsg('adminMessage', e.message, 'err');
+    if(!isSilent) await showCenterNotice(e.message || 'Lưu nháp không thành công.', 'err');
     throw e;
   }
 }
@@ -3373,9 +3453,11 @@ async function publishWeek(){
     renderWeekLabel();
     renderPaper();
     renderEditor();
-    showWarnings('adminMessage', [], 'Đã công bố lịch tuần.');
+    clearMsg('adminMessage');
+    await showCenterNotice('Đã công bố lịch tuần.', 'ok');
   }catch(e){
     setMsg('adminMessage', e.message, 'err');
+    await showCenterNotice(e.message || 'Công bố lịch không thành công.', 'err');
     throw e;
   }
 }
