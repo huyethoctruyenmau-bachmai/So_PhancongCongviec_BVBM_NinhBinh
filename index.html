@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 52.8</title>
+  <title>Lịch phân công công việc PXN - Version 53.8</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2508,7 +2508,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 52.8</div>
+    <div id="versionFooter" class="version-footer">Version 53.8</div>
   </main>
 </div>
 
@@ -2562,7 +2562,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 52;
+const INDEX_VERSION = 53;
 const CODE_VERSION = 8;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -3198,7 +3198,7 @@ function renderEditor(){
           <div class="edit-cell-box">
             <div class="name-clear-wrap"><input list="staffOptions" data-kind="name" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" value="${escAttr(val)}" oninput="updateEditCell(this)"><button class="name-clear-btn" type="button" onclick="clearNameInput(this)" aria-label="Xóa tên">×</button></div>
             <div class="edit-cell-options">
-              <select class="edit-shift" data-kind="shift" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" onchange="updateEditCell(this)">
+              <select class="edit-shift" data-kind="shift" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" oninput="updateEditCell(this)" onchange="updateEditCell(this)">
                 <option value="FULL" ${shift === 'FULL' ? 'selected' : ''}>Cả ngày</option>
                 <option value="AM" ${shift === 'AM' ? 'selected' : ''}>Sáng</option>
                 <option value="PM" ${shift === 'PM' ? 'selected' : ''}>Chiều</option>
@@ -3269,10 +3269,23 @@ function updateEditCell(input){
   }
 }
 
+function syncVisibleEditorInputs(){
+  if(!state.editData || !$('editorBox')) return;
+  const inputs = Array.from(document.querySelectorAll('#editorBox [data-kind="name"]'));
+  const seen = {};
+  inputs.forEach(input => {
+    const key = [input.dataset.day, input.dataset.pos, input.dataset.stt].join('|');
+    if(seen[key]) return;
+    seen[key] = true;
+    updateEditCell(input);
+  });
+}
+
 async function saveDraft(silent){
   ensureLogged();
   const isSilent = silent === true;
   if(!state.editData) await loadAdminWeek();
+  syncVisibleEditorInputs();
   const localEditData = cloneWeekData(state.editData);
   try{
     if(!isSilent) setMsg('adminMessage', 'Đang lưu nháp...', 'warn');
