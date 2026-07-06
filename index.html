@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 53.8</title>
+  <title>Lịch phân công công việc PXN - Version 54.9</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2297,6 +2297,47 @@
       font-weight:500!important;
     }
 
+
+    /* ===== PATCH V54.9: SPIN NÚT GIỐNG APP MẪU ===== */
+    .loading-dot{
+      display:inline-block!important;
+      width:15px!important;
+      height:15px!important;
+      min-width:15px!important;
+      min-height:15px!important;
+      border:2px solid rgba(255,255,255,.55)!important;
+      border-top-color:#fff!important;
+      border-radius:50%!important;
+      animation:spin .75s linear infinite!important;
+      vertical-align:-2px!important;
+      flex:0 0 auto!important;
+    }
+    .btn.secondary .loading-dot,
+    .btn.ghost .loading-dot,
+    .swap-refresh-icon .loading-dot,
+    .proposal-refresh-icon .loading-dot,
+    .logout-icon-btn .loading-dot,
+    .tab-day .loading-dot,
+    button:not(.primary):not(.ok):not(.danger) .loading-dot{
+      border-color:#d2e3fc!important;
+      border-top-color:currentColor!important;
+    }
+    .btn.ok .loading-dot,
+    .btn.primary .loading-dot,
+    .btn.danger .loading-dot{
+      border-color:rgba(255,255,255,.55)!important;
+      border-top-color:#fff!important;
+    }
+    button.is-loading{
+      opacity:.62!important;
+      pointer-events:none!important;
+      cursor:not-allowed!important;
+      color:inherit!important;
+    }
+    button.is-loading > *{opacity:1!important}
+    button.is-loading::after{display:none!important;content:none!important}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
 </style>
 </head>
 <body>
@@ -2508,7 +2549,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 53.8</div>
+    <div id="versionFooter" class="version-footer">Version 54.9</div>
   </main>
 </div>
 
@@ -2562,8 +2603,8 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 53;
-const CODE_VERSION = 8;
+const INDEX_VERSION = 54;
+const CODE_VERSION = 9;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
 const POSITIONS = [
@@ -2793,15 +2834,28 @@ function closeAppConfirm(result){
 }
 
 function sleep(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
+function buttonBusyText(btn){
+  if(!btn) return 'Đang xử lý...';
+  const text = String(btn.textContent || '').trim();
+  if(text) return text;
+  const label = btn.getAttribute('aria-label') || btn.getAttribute('title') || 'Đang xử lý...';
+  return String(label || 'Đang xử lý...').trim();
+}
+
 function startButtonLoading(btn){
   if(!btn || btn.disabled) return;
   btn.dataset.loadingBound = '1';
-  if(btn.dataset.loadingCount === undefined) btn.dataset.wasDisabled = btn.disabled ? '1' : '0';
+  if(btn.dataset.loadingCount === undefined){
+    btn.dataset.wasDisabled = btn.disabled ? '1' : '0';
+    btn.dataset.originalHtml = btn.innerHTML;
+  }
   btn.dataset.loadingCount = String((Number(btn.dataset.loadingCount || 0) || 0) + 1);
   btn.classList.add('is-loading');
   btn.setAttribute('aria-busy', 'true');
   btn.disabled = true;
+  btn.innerHTML = `<span class="loading-dot"></span><span>${esc(buttonBusyText(btn))}</span>`;
 }
+
 function stopButtonLoading(btn){
   if(!btn) return;
   const next = Math.max(0, (Number(btn.dataset.loadingCount || 1) || 1) - 1);
@@ -2809,10 +2863,12 @@ function stopButtonLoading(btn){
   if(next > 0) return;
   btn.classList.remove('is-loading');
   btn.removeAttribute('aria-busy');
+  if(btn.dataset.originalHtml !== undefined) btn.innerHTML = btn.dataset.originalHtml;
   if(btn.dataset.wasDisabled !== '1') btn.disabled = false;
   delete btn.dataset.loadingCount;
   delete btn.dataset.loadingBound;
   delete btn.dataset.wasDisabled;
+  delete btn.dataset.originalHtml;
 }
 function withButtonLoading(handler){
   return async function(event){
