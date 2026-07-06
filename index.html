@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 48.8</title>
+  <title>Lịch phân công công việc PXN - Version 50.8</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2205,6 +2205,87 @@
       text-align:center!important;
     }
 
+
+    /* ===== PATCH V49.8: NÚT X XÓA NHANH Ô CHỌN TÊN ===== */
+    .name-clear-wrap{
+      position:relative;
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      box-sizing:border-box;
+    }
+    .name-clear-wrap input{
+      width:100%!important;
+      max-width:100%!important;
+      min-width:0!important;
+      padding-right:34px!important;
+      box-sizing:border-box!important;
+    }
+    .name-clear-btn{
+      position:absolute;
+      right:5px;
+      top:50%;
+      transform:translateY(-50%);
+      width:24px;
+      height:24px;
+      min-width:24px;
+      min-height:24px;
+      border:0;
+      border-radius:50%;
+      background:transparent;
+      color:#5f6368;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+      font-size:18px;
+      line-height:1;
+      font-weight:400;
+      cursor:pointer;
+      z-index:3;
+      box-shadow:none;
+    }
+    .name-clear-btn:hover,
+    .name-clear-btn:active{
+      background:#eef3fb;
+      color:var(--g-blue);
+    }
+    #adminPanel .edit-cell-box .name-clear-wrap input{
+      padding-right:24px!important;
+    }
+    #adminPanel .edit-cell-box .name-clear-btn{
+      right:2px;
+      width:20px;
+      height:20px;
+      min-width:20px;
+      min-height:20px;
+      font-size:15px;
+    }
+    @media (max-width:760px){
+      .name-clear-wrap input{
+        padding-right:34px!important;
+      }
+      .name-clear-btn{
+        width:26px;
+        height:26px;
+        min-width:26px;
+        min-height:26px;
+        right:5px;
+        font-size:18px;
+      }
+      #adminPanel .edit-cell-box .name-clear-wrap input{
+        padding-right:24px!important;
+      }
+      #adminPanel .edit-cell-box .name-clear-btn{
+        width:20px;
+        height:20px;
+        min-width:20px;
+        min-height:20px;
+        right:2px;
+        font-size:15px;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -2292,7 +2373,7 @@
             </div>
             <div class="swap-field">
               <label id="receiverLabel">Người được đề xuất</label>
-              <input id="receiverInput" list="staffOptions" placeholder="Gõ tên hoặc mã nhân viên">
+              <div class="name-clear-wrap"><input id="receiverInput" list="staffOptions" placeholder="Gõ tên hoặc mã nhân viên"><button class="name-clear-btn" type="button" onclick="clearNameInput('receiverInput')" aria-label="Xóa tên">×</button></div>
             </div>
             <div id="targetAssignmentBox" class="swap-field swap-only">
               <label>Vị trí người được đề xuất</label>
@@ -2387,11 +2468,11 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
             </div>
             <div class="proposal-filter-field">
               <label>Người tạo</label>
-              <input id="proposalFilterCreator" list="staffOptions" placeholder="Tên hoặc mã nhân viên">
+              <div class="name-clear-wrap"><input id="proposalFilterCreator" list="staffOptions" placeholder="Tên hoặc mã nhân viên"><button class="name-clear-btn" type="button" onclick="clearNameInput('proposalFilterCreator')" aria-label="Xóa tên">×</button></div>
             </div>
             <div class="proposal-filter-field">
               <label>Người xác nhận</label>
-              <input id="proposalFilterReceiver" list="staffOptions" placeholder="Tên hoặc mã nhân viên">
+              <div class="name-clear-wrap"><input id="proposalFilterReceiver" list="staffOptions" placeholder="Tên hoặc mã nhân viên"><button class="name-clear-btn" type="button" onclick="clearNameInput('proposalFilterReceiver')" aria-label="Xóa tên">×</button></div>
             </div>
             <div class="proposal-filter-field">
               <label>Trạng thái</label>
@@ -2416,7 +2497,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 48.8</div>
+    <div id="versionFooter" class="version-footer">Version 50.8</div>
   </main>
 </div>
 
@@ -2470,7 +2551,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 48;
+const INDEX_VERSION = 50;
 const CODE_VERSION = 8;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -2704,9 +2785,11 @@ function sleep(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
 function startButtonLoading(btn){
   if(!btn || btn.disabled) return;
   btn.dataset.loadingBound = '1';
+  if(btn.dataset.loadingCount === undefined) btn.dataset.wasDisabled = btn.disabled ? '1' : '0';
   btn.dataset.loadingCount = String((Number(btn.dataset.loadingCount || 0) || 0) + 1);
   btn.classList.add('is-loading');
   btn.setAttribute('aria-busy', 'true');
+  btn.disabled = true;
 }
 function stopButtonLoading(btn){
   if(!btn) return;
@@ -2715,8 +2798,10 @@ function stopButtonLoading(btn){
   if(next > 0) return;
   btn.classList.remove('is-loading');
   btn.removeAttribute('aria-busy');
+  if(btn.dataset.wasDisabled !== '1') btn.disabled = false;
   delete btn.dataset.loadingCount;
   delete btn.dataset.loadingBound;
+  delete btn.dataset.wasDisabled;
 }
 function withButtonLoading(handler){
   return async function(event){
@@ -3087,7 +3172,7 @@ function renderEditor(){
   const data = state.editData;
   if(!data) return;
   $('editorTabs').innerHTML = (data.days || []).map((d,i) => `
-    <button class="tab-day ${i === state.activeEditDay ? 'active' : ''}" type="button" onclick="selectEditDay(${i})">${esc(d.thu)} ${esc(d.dateText)}</button>
+    <button class="tab-day ${i === state.activeEditDay ? 'active' : ''}" type="button" onclick="selectEditDayWithLoading(${i}, this)">${esc(d.thu)} ${esc(d.dateText)}</button>
   `).join('');
   const day = data.days[state.activeEditDay] || data.days[0];
   const maxRows = Math.max(DEFAULT_ROWS, getMaxRows(day));
@@ -3102,7 +3187,7 @@ function renderEditor(){
         const lunch = item.lamTrua !== undefined ? !!item.lamTrua : (pos.lunch && stt === 1);
         return `<td>
           <div class="edit-cell-box">
-            <input list="staffOptions" data-kind="name" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" value="${escAttr(val)}" oninput="updateEditCell(this)">
+            <div class="name-clear-wrap"><input list="staffOptions" data-kind="name" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" value="${escAttr(val)}" oninput="updateEditCell(this)"><button class="name-clear-btn" type="button" onclick="clearNameInput(this)" aria-label="Xóa tên">×</button></div>
             <div class="edit-cell-options">
               <select class="edit-shift" data-kind="shift" data-day="${state.activeEditDay}" data-pos="${pi}" data-stt="${stt}" onchange="updateEditCell(this)">
                 <option value="FULL" ${shift === 'FULL' ? 'selected' : ''}>Cả ngày</option>
@@ -3130,6 +3215,18 @@ function renderEditor(){
 window.selectEditDay = function(i){
   state.activeEditDay = i;
   renderEditor();
+};
+
+window.selectEditDayWithLoading = function(i, btn){
+  startButtonLoading(btn);
+  setTimeout(() => {
+    try{
+      state.activeEditDay = i;
+      renderEditor();
+    }finally{
+      stopButtonLoading(btn);
+    }
+  }, 180);
 };
 
 function updateEditCell(input){
@@ -3561,6 +3658,22 @@ function assignmentText(a){
   const suffix = shiftSuffix(a.shift);
   return `${a.thu || ''} ${a.ngayText || ''} - ${a.viTri || ''} - STT ${a.stt || ''} - ${a.hoTen || ''}${suffix ? ' ' + suffix : ''}`;
 }
+
+window.clearNameInput = function(target){
+  let input = null;
+  if(typeof target === 'string'){
+    input = $(target);
+  }else if(target && target.closest){
+    const wrap = target.closest('.name-clear-wrap');
+    input = wrap ? wrap.querySelector('input') : null;
+  }
+  if(!input) return;
+  input.value = '';
+  input.dispatchEvent(new Event('input', { bubbles:true }));
+  input.dispatchEvent(new Event('change', { bubbles:true }));
+  if(input.dataset && input.dataset.kind === 'name') updateEditCell(input);
+  input.focus();
+};
 
 function renderStaffDatalist(){
   $('staffOptions').innerHTML = (state.personnel || []).map(p =>
