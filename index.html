@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 45.8</title>
+  <title>Lịch phân công công việc PXN - Version 48.8</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2131,6 +2131,80 @@
       }
     }
 
+
+    /* ===== PATCH V46.8: MOBILE TẠO LỊCH - NÚT THỨ THEO ĐỊNH DẠNG NÚT CHUNG ===== */
+    @media (max-width:760px){
+      #adminPanel #editorTabs{
+        display:grid!important;
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        gap:8px!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        box-sizing:border-box!important;
+      }
+      #adminPanel #editorTabs .tab-day{
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:40px!important;
+        min-height:40px!important;
+        padding:0 12px!important;
+        border-radius:4px!important;
+        border:1px solid var(--g-line)!important;
+        background:#fff!important;
+        color:var(--g-blue)!important;
+        font-size:14px!important;
+        font-weight:500!important;
+        line-height:20px!important;
+        letter-spacing:.15px!important;
+        display:inline-flex!important;
+        align-items:center!important;
+        justify-content:center!important;
+        text-align:center!important;
+        white-space:nowrap!important;
+        overflow:hidden!important;
+        text-overflow:ellipsis!important;
+        box-shadow:none!important;
+        box-sizing:border-box!important;
+      }
+      #adminPanel #editorTabs .tab-day.active{
+        background:var(--g-blue)!important;
+        color:#fff!important;
+        border-color:var(--g-blue)!important;
+        box-shadow:none!important;
+        font-weight:500!important;
+      }
+    }
+
+
+    /* ===== PATCH V48.8: LỊCH CV - HIỂN THỊ CA SÁNG/CHIỀU DƯỚI TÊN ===== */
+    .schedule-table td .person-name{
+      display:inline-flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:1px!important;
+    }
+    .schedule-table td .shift-suffix{
+      display:block!important;
+      width:100%!important;
+      max-width:100%!important;
+      flex:0 0 auto!important;
+      line-height:1.08!important;
+      margin-top:1px!important;
+      text-align:center!important;
+      white-space:nowrap!important;
+      font-size:.88em!important;
+      font-weight:400!important;
+    }
+    .schedule-table td .name-given,
+    .schedule-table td .name-given.single{
+      display:block!important;
+      width:100%!important;
+      text-align:center!important;
+    }
+
 </style>
 </head>
 <body>
@@ -2342,7 +2416,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 45.8</div>
+    <div id="versionFooter" class="version-footer">Version 48.8</div>
   </main>
 </div>
 
@@ -2396,7 +2470,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 45;
+const INDEX_VERSION = 48;
 const CODE_VERSION = 8;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
@@ -2481,7 +2555,7 @@ function bindEvents(){
   $('btnLoadAdminWeek').onclick = withButtonLoading(loadAdminWeek);
   if($('btnCopyPrevWeek')) $('btnCopyPrevWeek').onclick = withButtonLoading(copyPrevWeek);
   $('btnSaveDraft').onclick = withButtonLoading(saveDraft);
-  $('btnPublishWeek').onclick = withButtonLoading(publishWeek);
+  $('btnPublishWeek').onclick = publishWeek;
 
   $('swapType').onchange = refreshSwapFormMode;
   if($('swapDate')) $('swapDate').onchange = () => { populateMyAssignments(); populateTargetAssignments(); };
@@ -3089,20 +3163,21 @@ function updateEditCell(input){
   }
 }
 
-async function saveDraft(){
+async function saveDraft(silent){
   ensureLogged();
   if(!state.editData) await loadAdminWeek();
   try{
-    setMsg('adminMessage', 'Đang lưu nháp...', 'warn');
+    if(!silent) setMsg('adminMessage', 'Đang lưu nháp...', 'warn');
     const payload = { weekStart: state.weekStart, days: collectEditDays() };
     const res = await api('saveWeekSchedule', { token: state.token, payload });
     state.editData = JSON.parse(JSON.stringify(res.data));
     state.weekData = res.data.status === 'PUBLISHED' || res.data.status === 'LOCKED' ? res.data : state.weekData;
     renderEditor();
     if(state.weekData) renderPaper();
-    showWarnings('adminMessage', [], 'Đã lưu nháp.');
+    if(!silent) showWarnings('adminMessage', [], 'Đã lưu nháp.');
   }catch(e){
     setMsg('adminMessage', e.message, 'err');
+    throw e;
   }
 }
 
@@ -3110,8 +3185,7 @@ async function publishWeek(){
   ensureLogged();
   try{
     if(!state.editData) await loadAdminWeek();
-    await saveDraft();
-    setMsg('adminMessage', 'Đang công bố lịch...', 'warn');
+    await saveDraft(true);
     const res = await api('publishWeekSchedule', { token: state.token, payload: { weekStart: state.weekStart } });
     state.weekData = res.data;
     state.editData = JSON.parse(JSON.stringify(res.data));
@@ -3556,8 +3630,9 @@ function setProposalFilterDefaultWeek(force){
   const fromEl = $('proposalFilterFromDate');
   const toEl = $('proposalFilterToDate');
   if(!fromEl || !toEl) return;
-  const from = state.weekStart || mondayOf(new Date());
-  const to = addDays(from, 6);
+  const today = fmtIso(new Date());
+  const from = addDays(today, -6);
+  const to = today;
   if(force || !fromEl.value) fromEl.value = from;
   if(force || !toEl.value) toEl.value = to;
   refreshViDatePickers();
