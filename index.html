@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-  <title>Lịch phân công công việc PXN - Version 67.11</title>
+  <title>Lịch phân công công việc PXN - Version 68.12</title>
   <link rel="icon" href="./favicon.ico?v=32.4">
   <link rel="icon" type="image/png" sizes="64x64" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
   <link rel="shortcut icon" type="image/png" href="./APP_ICON_LICH_PHAN_CONG_64.png?v=32.4">
@@ -2624,6 +2624,55 @@
       }
     }
 
+
+    /* ===== START V68.12: XUẤT EXCEL LỊCH THEO KHOẢNG NGÀY ===== */
+    .paper-actions{
+      position:absolute;top:8px;right:8px;z-index:4;
+      display:flex;align-items:center;gap:4px;
+    }
+    .paper-actions .paper-print-icon,.paper-excel-icon{
+      position:static!important;top:auto!important;right:auto!important;
+      width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
+      border-radius:50%!important;display:inline-grid!important;place-items:center!important;
+      padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;
+    }
+    .paper-actions .paper-print-icon{color:var(--g-blue)!important}
+    .paper-excel-icon{color:#188038!important}
+    .paper-excel-icon:hover{background:rgba(24,128,56,.08)!important;color:#137333!important}
+    .paper-excel-icon .icon2d{width:20px!important;height:20px!important;stroke-width:1.9!important}
+    .excel-export-card{
+      width:min(520px,calc(100vw - 24px))!important;
+      max-width:min(520px,calc(100vw - 24px))!important;
+    }
+    .excel-export-title{
+      font-family:Arial,sans-serif!important;font-weight:700!important;letter-spacing:0!important;
+    }
+    .excel-export-grid{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;
+    }
+    .excel-export-field{min-width:0;width:100%}
+    .excel-export-field input{
+      width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+    }
+    .excel-export-note{
+      margin-top:8px;color:var(--g-muted);font-size:13px;line-height:1.45;
+    }
+    #btnDoExcelExport{min-width:130px!important}
+    @media(max-width:760px){
+      .paper-actions{top:6px!important;right:6px!important;gap:2px!important}
+      .paper-actions .paper-print-icon,.paper-excel-icon{
+        width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;
+      }
+      .excel-export-card{width:calc(100vw - 20px)!important;max-width:calc(100vw - 20px)!important}
+      .excel-export-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+      .excel-export-field,.excel-export-field .vi-date-wrap,.excel-export-field .vi-date-display{
+        min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;
+      }
+      #btnDoExcelExport{width:100%!important}
+    }
+    @media print{.paper-actions{display:none!important}}
+    /* ===== END V68.12: XUẤT EXCEL LỊCH THEO KHOẢNG NGÀY ===== */
+
 </style>
 </head>
 <body>
@@ -2835,7 +2884,7 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
       </div>
     </section>
 
-    <div id="versionFooter" class="version-footer">Version 67.11</div>
+    <div id="versionFooter" class="version-footer">Version 68.12</div>
   </main>
 </div>
 
@@ -2881,6 +2930,30 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   </div>
 </div>
 
+<div id="excelExportModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-card excel-export-card">
+    <div class="modal-head">
+      <div class="modal-title excel-export-title">XUẤT EXCEL LỊCH</div>
+      <button id="btnCloseExcelExport" class="close" type="button">×</button>
+    </div>
+    <div id="excelExportMessage"></div>
+    <div class="excel-export-grid">
+      <div class="excel-export-field">
+        <label for="excelFromDate">Từ ngày</label>
+        <input id="excelFromDate" class="date-vi-input" type="date">
+      </div>
+      <div class="excel-export-field">
+        <label for="excelToDate">Đến ngày</label>
+        <input id="excelToDate" class="date-vi-input" type="date">
+      </div>
+    </div>
+    <div class="excel-export-note">Khoảng thời gian xuất Excel tối đa là 1 năm.</div>
+    <div class="btn-row">
+      <button id="btnDoExcelExport" class="btn ok" type="button">Xuất Excel</button>
+    </div>
+  </div>
+</div>
+
 <datalist id="staffOptions"></datalist>
 
 <script>
@@ -2889,8 +2962,8 @@ Người được đánh dấu “Trưa” sẽ tự tô chữ đỏ. Nếu ch�
   Sau khi Deploy Apps Script Web App, dán URL /exec vào GAS_WEB_APP_URL.
 ========================================================= */
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDoqz5PAjfLCzQvB8h_MeQHVa8t-0BYT9Syz_RVcGsYFTVFh2i7ZNt57Jo3mNKgkJW/exec';
-const INDEX_VERSION = 67;
-const CODE_VERSION = 11;
+const INDEX_VERSION = 68;
+const CODE_VERSION = 12;
 const APP_VERSION = `${INDEX_VERSION}.${CODE_VERSION}`;
 
 const POSITIONS = [
@@ -2966,6 +3039,11 @@ function bindEvents(){
   $('loginPass').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
   $('btnLogout').onclick = withButtonLoading(logout);
   bindAppConfirmModal();
+  if($('btnCloseExcelExport')) $('btnCloseExcelExport').onclick = closeExcelExportModal;
+  if($('btnDoExcelExport')){
+    $('btnDoExcelExport').dataset.loadingManaged = '1';
+    $('btnDoExcelExport').onclick = withButtonLoading(exportScheduleExcel);
+  }
 
   document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => showTab(btn.dataset.tab));
@@ -2995,7 +3073,7 @@ function bindEvents(){
 
   document.addEventListener('click', e => {
     const btn = e.target && e.target.closest ? e.target.closest('button') : null;
-    if(!btn || btn.disabled || btn.dataset.loadingBound === '1' || btn.classList.contains('tab-btn')) return;
+    if(!btn || btn.disabled || btn.dataset.loadingBound === '1' || btn.dataset.loadingManaged === '1' || btn.classList.contains('tab-btn')) return;
     startButtonLoading(btn);
     setTimeout(() => stopButtonLoading(btn), 450);
   }, true);
@@ -3426,9 +3504,95 @@ function renderWeekLabel(){
   $('weekLabel').textContent = `${state.weekData.weekStartText} - ${state.weekData.weekEndText}`;
 }
 
+function openExcelExportModal(){
+  const modal = $('excelExportModal');
+  if(!modal) return;
+  clearMsg('excelExportMessage');
+  const from = (state.weekData && state.weekData.weekStart) || state.weekStart || mondayOf(new Date());
+  const to = (state.weekData && state.weekData.weekEnd) || addDays(from, 6);
+  $('excelFromDate').value = from;
+  $('excelToDate').value = to;
+  modal.classList.remove('hidden');
+  scheduleViDatePickerEnhance();
+  setTimeout(refreshViDatePickers, 0);
+}
+
+function closeExcelExportModal(){
+  const modal = $('excelExportModal');
+  if(modal) modal.classList.add('hidden');
+  clearMsg('excelExportMessage');
+}
+
+function excelMaxDateOneYear(from){
+  const d = parseIsoDate(from);
+  const y = d.getFullYear() + 1;
+  const m = d.getMonth();
+  const day = d.getDate();
+  const lastDay = new Date(y, m + 1, 0).getDate();
+  return fmtIso(new Date(y, m, Math.min(day, lastDay)));
+}
+
+function downloadBase64File(base64, fileName, mimeType){
+  const binary = atob(String(base64 || ''));
+  const chunkSize = 32768;
+  const chunks = [];
+  for(let offset = 0; offset < binary.length; offset += chunkSize){
+    const slice = binary.slice(offset, offset + chunkSize);
+    const bytes = new Uint8Array(slice.length);
+    for(let i = 0; i < slice.length; i++) bytes[i] = slice.charCodeAt(i);
+    chunks.push(bytes);
+  }
+  const blob = new Blob(chunks, { type: mimeType || 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName || 'Lich_phan_cong.xlsx';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+async function exportScheduleExcel(){
+  clearMsg('excelExportMessage');
+  try{
+    ensureLogged();
+    const fromDate = $('excelFromDate').value;
+    const toDate = $('excelToDate').value;
+    if(!fromDate || !toDate) throw new Error('Vui lòng chọn đầy đủ Từ ngày và Đến ngày.');
+    if(toDate < fromDate) throw new Error('Đến ngày không được nhỏ hơn Từ ngày.');
+    if(toDate > excelMaxDateOneYear(fromDate)) throw new Error('Khoảng thời gian xuất Excel tối đa là 1 năm.');
+
+    const res = await api('schedule_exportExcelRange', {
+      token: state.token,
+      payload: { fromDate, toDate }
+    });
+    const file = res.data || {};
+    if(!file.base64) throw new Error('Backend chưa trả dữ liệu file Excel.');
+    downloadBase64File(file.base64, file.fileName, file.mimeType);
+    closeExcelExportModal();
+    await showCenterNotice('Đã xuất file Excel.', 'ok');
+  }catch(e){
+    setMsg('excelExportMessage', e.message || 'Xuất Excel không thành công.', 'err');
+    await showCenterNotice(e.message || 'Xuất Excel không thành công.', 'err');
+    throw e;
+  }
+}
+
+function renderPaperActionButtons(){
+  return `<div class="paper-actions">
+    <button class="paper-print-icon" type="button" onclick="window.print()" aria-label="In lịch" title="In lịch">
+      <svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+    </button>
+    <button class="paper-excel-icon" type="button" onclick="openExcelExportModal()" aria-label="Xuất Excel" title="Xuất Excel">
+      <svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h11l5 5v13H4z"/><path d="M15 3v6h5"/><path d="M8 12l5 6M13 12l-5 6"/></svg>
+    </button>
+  </div>`;
+}
+
 function renderLoadingPaper(){
   $('paper').innerHTML = `
-    <button class="paper-print-icon" type="button" onclick="window.print()" aria-label="In lịch" title="In lịch"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg></button>
+    ${renderPaperActionButtons()}
     <div class="paper-head">
       <div class="paper-title">BẢNG PHÂN CÔNG CÔNG VIỆC TUẦN</div>
       <div class="paper-sub">Đang tải dữ liệu...</div>
@@ -3437,7 +3601,7 @@ function renderLoadingPaper(){
 
 function renderErrorPaper(msg){
   $('paper').innerHTML = `
-    <button class="paper-print-icon" type="button" onclick="window.print()" aria-label="In lịch" title="In lịch"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg></button>
+    ${renderPaperActionButtons()}
     <div class="paper-head">
       <div class="paper-title">BẢNG PHÂN CÔNG CÔNG VIỆC TUẦN</div>
       <div class="paper-sub" style="color:#b42318">${esc(msg)}</div>
@@ -3450,7 +3614,7 @@ function renderPaper(){
   const q = $('searchName').value.trim();
   const daysHtml = (data.days || []).map(day => renderDayBlock(day, q)).join('');
   $('paper').innerHTML = `
-    <button class="paper-print-icon" type="button" onclick="window.print()" aria-label="In lịch" title="In lịch"><svg class="icon2d" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg></button>
+    ${renderPaperActionButtons()}
     <div class="paper-head">
       <div class="paper-title">BẢNG PHÂN CÔNG CÔNG VIỆC TUẦN</div>
       <div class="paper-sub">Từ ngày ${esc(data.weekStartText)} đến ngày ${esc(data.weekEndText)}</div>
